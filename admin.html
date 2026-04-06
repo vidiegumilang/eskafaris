@@ -1,84 +1,36 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin - Input Flight Data</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        nav { background: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; }
-        .admin-card { max-width: 600px; margin: 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-update { width: 100%; padding: 15px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .btn-update:hover { background: #2980b9; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div style="color: white;">✈️ ADMIN PANEL</div>
-    <div>
-        <a href="admin.html" style="color: #3498db;">INPUT DATA</a>
-        <a href="index.html">LIHAT DASHBOARD</a>
-    </div>
-</nav>
-
-<div class="admin-card">
-    <h2>Update Flight Schedule</h2>
-    <div class="grid">
-        <div class="form-group">
-            <label>Registration</label>
-            <select id="reg"></select>
-        </div>
-        <div class="form-group">
-            <label>Period</label>
-            <select id="period">
-                <option value="0">1ST (01:00-02:00)</option>
-                <option value="1">2ND (02:30-03:30)</option>
-                <option value="2">3RD (04:00-05:00)</option>
-                <option value="3">REST (05:00-06:00)</option>
-                <option value="4">4TH (06:30-07:30)</option>
-                <option value="5">5TH (08:00-09:00)</option>
-                <option value="6">6TH (09:30-10:30)</option>
-                <option value="7">7TH (11:00-12:00)</option>
-            </select>
-        </div>
-    </div>
-    <div class="grid">
-        <div class="form-group"><label>FI (Instruktur)</label><input type="text" id="fi"></div>
-        <div class="form-group"><label>Student</label><input type="text" id="std"></div>
-        <div class="form-group"><label>Exercise (Stage)</label><input type="text" id="exc"></div>
-        <div class="form-group"><label>Course</label><input type="text" id="crs" value="PNB 7"></div>
-        <div class="form-group"><label>Block OFF</label><input type="time" id="off"></div>
-        <div class="form-group"><label>Block ON</label><input type="time" id="on"></div>
-        <div class="form-group"><label>Remark</label><input type="text" id="rmk" placeholder="OK/Delay"></div>
-    </div>
-    <button class="btn-update" onclick="saveData()">UPDATE DASHBOARD</button>
+<div class="form-group">
+    <label>Flight Date (Tanggal Penerbangan)</label>
+    <input type="date" id="flight-date">
 </div>
 
 <script>
+    // Set default tanggal ke hari ini saat halaman dimuat
+    document.getElementById('flight-date').valueAsDate = new Date();
+
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
     const regEl = document.getElementById('reg');
     aircrafts.forEach(r => regEl.innerHTML += `<option value="${r}">PK-${r}</option>`);
 
     function saveData() {
         const data = JSON.parse(localStorage.getItem('flightDB') || '{}');
+        const date = document.getElementById('flight-date').value; // Ambil Tanggal
         const r = regEl.value;
         const p = document.getElementById('period').value;
-        
-        // Simpan data dengan format key: REG-PERIODE-KOLOM
+
+        if(!date) {
+            alert("Pilih tanggal terlebih dahulu!");
+            return;
+        }
+
+        // Format KEY baru: TANGGAL-REG-PERIODE-KOLOM
         const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
-        fields.forEach((f, i) => {
+        fields.forEach((f) => {
             const val = document.getElementById(f).value;
-            data[`${r}-${p}-${f}`] = val;
+            // Key sekarang menyertakan tanggal agar data tidak tertimpa di hari berbeda
+            data[`${date}-${r}-${p}-${f}`] = val;
         });
 
         localStorage.setItem('flightDB', JSON.stringify(data));
-        alert("Data PK-" + r + " Periode " + (parseInt(p)+1) + " Updated!");
+        alert(`Data PK-${r} untuk tanggal ${date} berhasil disimpan!`);
     }
 </script>
-</body>
-</html>
