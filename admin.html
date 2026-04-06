@@ -2,82 +2,100 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Input Flight Data</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        nav { background: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; }
-        .admin-card { max-width: 600px; margin: 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-update { width: 100%; padding: 15px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .btn-update:hover { background: #2980b9; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Update Schedule</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="admin-body">
 
 <nav>
-    <div style="color: white;">✈️ ADMIN PANEL</div>
+    <div style="font-size: 1.2rem;">⚙️ <strong>ADMIN</strong> PANEL</div>
     <div>
-        <a href="admin.html" style="color: #3498db;">INPUT DATA</a>
         <a href="index.html">LIHAT DASHBOARD</a>
+        <a href="admin.html" style="border-bottom: 2px solid var(--accent);">INPUT DATA</a>
     </div>
 </nav>
 
-<div class="admin-card">
-    <h2>Update Flight Schedule</h2>
-    <div class="grid">
-        <div class="form-group">
-            <label>Registration</label>
-            <select id="reg"></select>
+<div class="container">
+    <div class="admin-card">
+        <h2 style="margin-top: 0; color: var(--primary);">Update Flight Entry</h2>
+        <p style="font-size: 0.9rem; color: #666;">Pilih pesawat dan periode untuk memperbarui data di monitor.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+
+        <div class="input-grid">
+            <div class="form-group">
+                <label>1. Registrasi Pesawat</label>
+                <select id="reg">
+                    </select>
+            </div>
+            <div class="form-group">
+                <label>2. Pilih Periode</label>
+                <select id="period">
+                    <option value="0">1ST PERIOD (01:00-02:00)</option>
+                    <option value="1">2ND PERIOD (02:30-03:30)</option>
+                    <option value="2">3RD PERIOD (04:00-05:00)</option>
+                    <option value="3">REST PERIOD (05:00-06:00)</option>
+                    <option value="4">4TH PERIOD (06:30-07:30)</option>
+                    <option value="5">5TH PERIOD (08:00-09:00)</option>
+                    <option value="6">6TH PERIOD (09:30-10:30)</option>
+                    <option value="7">7TH PERIOD (11:00-12:00)</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Period</label>
-            <select id="period">
-                <option value="0">1ST (01:00-02:00)</option>
-                <option value="1">2ND (02:30-03:30)</option>
-                <option value="2">3RD (04:00-05:00)</option>
-                <option value="3">REST (05:00-06:00)</option>
-                <option value="4">4TH (06:30-07:30)</option>
-                <option value="5">5TH (08:00-09:00)</option>
-                <option value="6">6TH (09:30-10:30)</option>
-                <option value="7">7TH (11:00-12:00)</option>
-            </select>
+
+        <div class="input-grid">
+            <div class="form-group">
+                <label>3. Instruktur (FI)</label>
+                <input type="text" id="fi" placeholder="Contoh: FD - JORDAN">
+            </div>
+            <div class="form-group">
+                <label>4. Nama Siswa (STD)</label>
+                <input type="text" id="std" placeholder="Nama Siswa">
+            </div>
+            <div class="form-group">
+                <label>5. Stage/Exercise (EXC)</label>
+                <input type="text" id="exc" placeholder="Contoh: B15">
+            </div>
+            <div class="form-group">
+                <label>6. Course (CRS)</label>
+                <input type="text" id="crs" placeholder="Contoh: PNB 7">
+            </div>
+        </div>
+
+        <div class="input-grid">
+            <div class="form-group">
+                <label>Block OFF</label>
+                <input type="time" id="off">
+            </div>
+            <div class="form-group">
+                <label>Block ON</label>
+                <input type="time" id="on">
+            </div>
+            <div class="form-group">
+                <label>Remark (RMK)</label>
+                <input type="text" id="rmk" placeholder="OK / Delay / Maintenance">
+            </div>
+        </div>
+
+        <button class="btn-update" onclick="saveData()">Update ke Dashboard</button>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.8rem; text-decoration: underline;">
+                Reset Semua Jadwal (Hapus Semua)
+            </button>
         </div>
     </div>
-    <div class="grid">
-        <div class="form-group"><label>FI (Instruktur)</label><input type="text" id="fi"></div>
-        <div class="form-group"><label>Student</label><input type="text" id="std"></div>
-        <div class="form-group"><label>Exercise (Stage)</label><input type="text" id="exc"></div>
-        <div class="form-group"><label>Course</label><input type="text" id="crs" value="PNB 7"></div>
-        <div class="form-group"><label>Block OFF</label><input type="time" id="off"></div>
-        <div class="form-group"><label>Block ON</label><input type="time" id="on"></div>
-        <div class="form-group"><label>Remark</label><input type="text" id="rmk" placeholder="OK/Delay"></div>
-    </div>
-    <button class="btn-update" onclick="saveData()">UPDATE DASHBOARD</button>
 </div>
 
+<script src="script.js"></script>
 <script>
-    const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
-    const regEl = document.getElementById('reg');
-    aircrafts.forEach(r => regEl.innerHTML += `<option value="${r}">PK-${r}</option>`);
-
-    function saveData() {
-        const data = JSON.parse(localStorage.getItem('flightDB') || '{}');
-        const r = regEl.value;
-        const p = document.getElementById('period').value;
-        
-        // Simpan data dengan format key: REG-PERIODE-KOLOM
-        const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
-        fields.forEach((f, i) => {
-            const val = document.getElementById(f).value;
-            data[`${r}-${p}-${f}`] = val;
-        });
-
-        localStorage.setItem('flightDB', JSON.stringify(data));
-        alert("Data PK-" + r + " Periode " + (parseInt(p)+1) + " Updated!");
+    // Fungsi tambahan untuk menghapus semua data jika diperlukan
+    function clearAllData() {
+        if (confirm("Apakah Anda yakin ingin menghapus SELURUH jadwal?")) {
+            localStorage.removeItem('flightDB');
+            alert("Semua data telah dihapus.");
+            location.reload();
+        }
     }
 </script>
 </body>
