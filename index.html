@@ -3,112 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Schedule Stacked View</title>
+    <title>Flight Ops System - PK-AEA to PK-AER</title>
     <style>
         :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --light: #ecf0f1;
+            /* Period Colors */
             --p12: #e74c3c; --p3: #2980b9; --prest: #16a085; 
             --p45: #d35400; --p67: #27ae60; --p8: #8e44ad;
-            --header-dark: #2c3e50;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: #eaedf1; margin: 0; padding: 15px; }
-        
-        h2 { margin: 10px 0; color: var(--header-dark); text-align: center; font-size: 1.5rem; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; }
 
-        .section-title { 
-            background: var(--header-dark); color: white; padding: 8px 15px; 
-            border-radius: 5px 5px 0 0; font-weight: bold; margin-top: 20px;
-            display: inline-block; font-size: 14px;
+        /* --- NAVIGATION BAR --- */
+        nav {
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
+        .nav-links button {
+            background: transparent;
+            border: 1px solid transparent;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .nav-links button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* --- LAYOUT --- */
+        .container { padding: 20px; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* --- TABLE STYLING --- */
         .table-wrapper { 
-            background: white; border-radius: 0 5px 5px 5px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            margin-bottom: 25px; overflow-x: auto; 
+            background: white; border-radius: 8px; overflow-x: auto; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px;
         }
-
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
         
-        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; font-size: 11px; }
-
-        /* Color Headers */
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; table-layout: fixed; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: center; font-size: 11px; }
+        
+        .reg-col { background: #34495e !important; color: white; width: 70px; font-weight: bold; position: sticky; left: 0; }
+        .course-col { background: #d1ecf1 !important; width: 55px; font-weight: bold; }
+        
+        /* Period Headers */
         .p-head { color: white; font-weight: bold; }
-        .sub-head { background: #f1f1f1; font-weight: bold; }
-        .reg-col { background: #34495e; color: white; font-weight: bold; width: 70px; }
-        .course { background: #d1ecf1; width: 50px; font-weight: bold; }
 
-        /* Zebra Row */
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #fff9e6; }
+        /* --- INPUT STYLING (ADMIN) --- */
+        input {
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 4px;
+            font-size: 11px;
+            text-align: center;
+        }
+        input:focus { border-color: var(--accent); outline: none; background: #fffde7; }
+
+        .save-bar {
+            position: fixed; bottom: 20px; right: 20px;
+        }
+        .btn-save {
+            background: var(--success); color: white; border: none; padding: 12px 25px;
+            border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
 
-<h2>FLIGHT TRAINING SCHEDULE - MONDAY, 2 MARCH 2026</h2>
+<nav>
+    <div class="logo"><strong>FLIGHT OPS</strong> | 2026</div>
+    <div class="nav-links">
+        <button id="btn-dash" class="active" onclick="showPage('dashboard')">DISPLAY MONITOR</button>
+        <button id="btn-admin" onclick="showPage('admin')">ADMIN INPUT</button>
+    </div>
+</nav>
 
-<div class="section-title">MORNING SESSION (P1 - REST)</div>
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2" class="reg-col">REG</th>
-                <th colspan="7" style="background:var(--p12)" class="p-head">1ST (01:00-02:00)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--p12)" class="p-head">2ND (02:30-03:30)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--p3)" class="p-head">3RD (04:00-05:00)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--prest)" class="p-head">REST (05:00-06:00)</th>
-            </tr>
-            <tr class="sub-head">
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
-            </tr>
-        </thead>
-        <tbody id="table-morning"></tbody>
-    </table>
-</div>
+<div class="container">
+    
+    <div id="page-dashboard" class="page active">
+        <h2 style="text-align:center">MONDAY, 2 MARCH 2026 - MONITORING BOARD</h2>
+        <div id="display-content">
+            </div>
+    </div>
 
-<div class="section-title">AFTERNOON SESSION (P4 - P8)</div>
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2" class="reg-col">REG</th>
-                <th colspan="7" style="background:var(--p45)" class="p-head">4TH (06:30-07:30)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--p45)" class="p-head">5TH (08:00-09:00)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--p67)" class="p-head">6TH (09:30-10:30)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--p8)" class="p-head">7TH (11:00-12:00)</th>
-            </tr>
-            <tr class="sub-head">
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
-            </tr>
-        </thead>
-        <tbody id="table-afternoon"></tbody>
-    </table>
+    <div id="page-admin" class="page">
+        <h2 style="text-align:center">DATA ENTRY CONTROL</h2>
+        <div id="admin-content">
+            </div>
+        <div class="save-bar">
+            <button class="btn-save" onclick="saveAllData()">💾 SIMPAN SEMUA DATA</button>
+        </div>
+    </div>
+
 </div>
 
 <script>
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
     
-    function generateRows(targetId, blockCount) {
-        const tbody = document.getElementById(targetId);
-        aircrafts.forEach(reg => {
-            let row = `<tr><td class="reg-col">PK-${reg}</td>`;
-            for (let i = 0; i < blockCount; i++) {
-                row += `<td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
-                if (i < blockCount - 1) row += `<td class="course">PNB 7</td>`;
+    const headers = [
+        { label: "1ST (01:00-02:00)", color: "var(--p12)" },
+        { label: "2ND (02:30-03:30)", color: "var(--p12)" },
+        { label: "3RD (04:00-05:00)", color: "var(--p3)" },
+        { label: "REST (05:00-06:00)", color: "var(--prest)" },
+        { label: "4TH (06:30-07:30)", color: "var(--p45)" },
+        { label: "5TH (08:00-09:00)", color: "var(--p45)" },
+        { label: "6TH (09:30-10:30)", color: "var(--p67)" },
+        { label: "7TH (11:00-12:00)", color: "var(--p8)" }
+    ];
+
+    // Fungsi Navigasi
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById('page-' + pageId).classList.add('active');
+        document.getElementById('btn-' + (pageId === 'dashboard' ? 'dash' : 'admin')).classList.add('active');
+        
+        if(pageId === 'dashboard') refreshDisplay();
+    }
+
+    // Generate Tabel (Reusable)
+    function createTable(type) {
+        let html = '';
+        // Kita bagi 2 baris (Morning & Afternoon)
+        const sections = [
+            { title: "MORNING SESSION (P1-REST)", start: 0, end: 4 },
+            { title: "AFTERNOON SESSION (P4-P8)", start: 4, end: 8 }
+        ];
+
+        sections.forEach(sec => {
+            html += `<div style="font-weight:bold; margin: 10px 0;">${sec.title}</div>`;
+            html += `<div class="table-wrapper"><table><thead><tr><th rowspan="2" class="reg-col">REG</th>`;
+            
+            for(let i=sec.start; i<sec.end; i++) {
+                html += `<th colspan="7" class="p-head" style="background:${headers[i].color}">${headers[i].label}</th>`;
+                if(i < sec.end - 1 || sec.start == 0) html += `<th rowspan="2" class="course-col">CRS</th>`;
             }
-            row += `</tr>`;
-            tbody.innerHTML += row;
+
+            html += `</tr><tr style="background:#eee">`;
+            for(let i=sec.start; i<sec.end; i++) {
+                html += `<td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>`;
+            }
+            html += `</tr></thead><tbody>`;
+
+            aircrafts.forEach(reg => {
+                html += `<tr><td class="reg-col">PK-${reg}</td>`;
+                for(let i=sec.start; i<sec.end; i++) {
+                    for(let j=0; j<7; j++) {
+                        const cellId = `${reg}-${i}-${j}`;
+                        if(type === 'admin') {
+                            html += `<td><input type="text" id="in-${cellId}" onchange="markDirty()"></td>`;
+                        } else {
+                            html += `<td id="out-${cellId}">-</td>`;
+                        }
+                    }
+                    if(i < sec.end - 1 || sec.start == 0) {
+                        html += `<td class="course-col">${type==='admin' ? `<input type="text" value="PNB 7" id="in-${reg}-${i}-crs">` : `<span id="out-${reg}-${i}-crs">PNB 7</span>`}</td>`;
+                    }
+                }
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+        });
+        return html;
+    }
+
+    // Inisialisasi
+    document.getElementById('admin-content').innerHTML = createTable('admin');
+    document.getElementById('display-content').innerHTML = createTable('dashboard');
+
+    function saveAllData() {
+        const data = {};
+        document.querySelectorAll('#page-admin input').forEach(input => {
+            data[input.id] = input.value;
+        });
+        localStorage.setItem('flightDataMaster', JSON.stringify(data));
+        alert("Data Berhasil Disimpan ke Sinkronisasi Lokal!");
+        refreshDisplay();
+    }
+
+    function refreshDisplay() {
+        const stored = localStorage.getItem('flightDataMaster');
+        if(!stored) return;
+        const data = JSON.parse(stored);
+        
+        Object.keys(data).forEach(key => {
+            const outId = key.replace('in-', 'out-');
+            const el = document.getElementById(outId);
+            if(el) el.innerText = data[key] || '-';
         });
     }
 
-    // Generate 4 blok untuk tabel atas, 4 blok untuk tabel bawah
-    generateRows('table-morning', 4);
-    generateRows('table-afternoon', 4);
+    function markDirty() {
+        // Bisa ditambahkan efek warna jika ada data yang belum disimpan
+    }
+
+    window.onload = refreshDisplay;
 </script>
 
 </body>
