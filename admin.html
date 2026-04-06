@@ -1,0 +1,21 @@
+<script>
+    function generateInputRows(targetId, blockCount) {
+        const tbody = document.getElementById(targetId);
+        aircrafts.forEach(reg => {
+            let row = `<tr><td class="reg-col">${reg}</td>`;
+            for (let i = 0; i < blockCount; i++) {
+                row += `
+                    <td><input type="text" placeholder="FI" list="list-fi"></td>
+                    <td><input type="text" placeholder="STD" list="list-student"></td>
+                    <td><input type="text" placeholder="EXC"></td>
+                    <td><input type="time"></td>
+                    <td><input type="time"></td>
+                    <td><input type="text" placeholder="RMK"></td>
+                    <td><input type="number"></td>
+                    <td class="course"><input type="text" value="PNB 7" list="list-course"></td>`;
+            }
+            row += `</tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+</script>
