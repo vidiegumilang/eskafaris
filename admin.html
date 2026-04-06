@@ -1,31 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Update Schedule</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+<nav>
+    <div class="nav-brand">⚙️ ADMIN PANEL</div>
+    <div class="nav-links">
+        <a href="index.html">LIHAT DASHBOARD</a>
+        <a href="admin.html" class="active">INPUT DATA</a>
+    </div>
+</nav>
+
 <div class="container">
     <div class="admin-card">
         <h2 style="margin-top: 0; color: var(--primary);">Update Flight Entry</h2>
-        <p style="font-size: 0.9rem; color: #666;">Masukkan detail penerbangan dasar di bawah ini.</p>
+        <p style="font-size: 0.9rem; color: #666;">Pilih pesawat dan periode, lalu isi detail instruktur dan siswa.</p>
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
 
         <div class="input-grid">
             <div class="form-group">
                 <label>1. Registrasi Pesawat</label>
                 <select id="reg">
-                    <option value="AEA">PK-AEA</option>
-                    <option value="AEB">PK-AEB</option>
-                    <option value="AEC">PK-AEC</option>
-                    <option value="AED">PK-AED</option>
-                    <option value="AEE">PK-AEE</option>
-                    <option value="AEF">PK-AEF</option>
-                    <option value="AEG">PK-AEG</option>
-                    <option value="AEH">PK-AEH</option>
-                    <option value="AEI">PK-AEI</option>
-                    <option value="AEJ">PK-AEJ</option>
-                    <option value="AEK">PK-AEK</option>
-                    <option value="AEL">PK-AEL</option>
-                    <option value="AEM">PK-AEM</option>
-                    <option value="AEN">PK-AEN</option>
-                    <option value="AEO">PK-AEO</option>
-                    <option value="AEP">PK-AEP</option>
-                    <option value="AEQ">PK-AEQ</option>
-                    <option value="AER">PK-AER</option>
+                    <option value="AEA">PK-AEA</option><option value="AEB">PK-AEB</option>
+                    <option value="AEC">PK-AEC</option><option value="AED">PK-AED</option>
+                    <option value="AEE">PK-AEE</option><option value="AEF">PK-AEF</option>
+                    <option value="AEG">PK-AEG</option><option value="AEH">PK-AEH</option>
+                    <option value="AEI">PK-AEI</option><option value="AEJ">PK-AEJ</option>
+                    <option value="AEK">PK-AEK</option><option value="AEL">PK-AEL</option>
+                    <option value="AEM">PK-AEM</option><option value="AEN">PK-AEN</option>
+                    <option value="AEO">PK-AEO</option><option value="AEP">PK-AEP</option>
+                    <option value="AEQ">PK-AEQ</option><option value="AER">PK-AER</option>
                 </select>
             </div>
             <div class="form-group">
@@ -60,10 +69,23 @@
 
         <button class="btn-update" onclick="saveData()">Update ke Dashboard</button>
         
-        <div style="margin-top: 25px; text-align: center;">
+        <div style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px; text-align: center;">
             <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; text-decoration: underline; font-size: 12px;">
-                Reset Semua Jadwal (Hapus Semua)
+                Reset Semua Jadwal
             </button>
         </div>
     </div>
 </div>
+
+<script src="script.js"></script>
+<script>
+    function clearAllData() {
+        if (confirm("Hapus semua data jadwal di monitor?")) {
+            localStorage.removeItem('flightDB');
+            alert("Data berhasil dikosongkan.");
+            location.reload();
+        }
+    }
+</script>
+</body>
+</html>
