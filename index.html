@@ -9,27 +9,19 @@
 <body class="dashboard-body">
 
 <nav>
-    <div style="font-size: 1.2rem;">🚀 <strong>FLIGHT OPS</strong> MONITOR</div>
-    <div>
-        <a href="index.html" style="border-bottom: 2px solid var(--accent);">DASHBOARD</a>
+    <div class="nav-brand">🚀 FLIGHT OPS MONITOR</div>
+    <div class="nav-links">
+        <a href="index.html" class="active">DASHBOARD</a>
         <a href="admin.html">ADMIN SETTINGS</a>
     </div>
 </nav>
 
 <div class="container">
-    <h2 style="text-align:center; color: white; margin-bottom: 20px;">FLIGHT TRAINING SCHEDULE - MONDAY, 2 MARCH 2026</h2>
-    
+    <h2 style="text-align:center; color: white; margin-bottom: 10px;">FLIGHT TRAINING SCHEDULE</h2>
+    <p style="text-align:center; color: #aaa; margin-bottom: 20px;">Monday, 2 March 2026</p>
     <div id="display"></div>
 </div>
 
 <script src="script.js"></script>
-<script>
-    // Memastikan tabel dibuat saat halaman dimuat
-    window.onload = () => {
-        if (typeof buildTable === 'function') {
-            buildTable(); // Fungsi dari script.js
-        }
-    };
-</script>
 </body>
 </html>
