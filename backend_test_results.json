@@ -1,0 +1,209 @@
+{
+  "summary": {
+    "tests_run": 40,
+    "tests_passed": 39,
+    "success_rate": 97.5
+  },
+  "results": [
+    {
+      "test": "Admin Login",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Register New User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Instructors",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Instructor",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Instructor",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Instructor",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Students",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Student",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Student",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Student",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Aircraft",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Aircraft",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Aircraft",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Aircraft",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Stages",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Stage",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Stage",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Stage",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Courses",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Course",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Course",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Course",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Schedules",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Schedules with Date Filter",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Schedule Entry",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Schedule Entry",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Schedule Entry",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Flight Periods",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Periods Count Check",
+      "success": true,
+      "details": "Got 10 periods as expected"
+    },
+    {
+      "test": "Batch Create/Update Schedules",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Daily Summary",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Daily Summary",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Expiring Licenses",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Export Schedules",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Export Returns Excel Content",
+      "success": true,
+      "details": "Got binary content"
+    },
+    {
+      "test": "Import Instructors",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Register Instructor User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Instructor Delete Attempt (Should Fail)",
+      "success": false,
+      "details": "Status: 404, Error: Not found"
+    },
+    {
+      "test": "Logout",
+      "success": true,
+      "details": "Status: 200"
+    }
+  ]
+}
