@@ -1,77 +1,52 @@
-// CONFIGURATION
-const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
-
-const periods = [
-    { name: "1ST (01-02)", color: "var(--p12)" },
-    { name: "2ND (02:30-03:30)", color: "var(--p12)" },
-    { name: "3RD (04-05)", color: "var(--p3)" },
-    { name: "REST (05-06)", color: "var(--prest)" },
-    { name: "4TH (06:30-07:30)", color: "var(--p45)" },
-    { name: "5TH (08-09)", color: "var(--p45)" },
-    { name: "6TH (09:30-10:30)", color: "var(--p67)" },
-    { name: "7TH (11-12)", color: "var(--p8)" }
-];
-
-// --- FUNGSI UNTUK ADMIN (INPUT) ---
-function initAdminForm() {
-    const regSelect = document.getElementById('reg');
-    if (regSelect) {
+// --- MODIFIKASI PADA FUNGSI GENERATE TABEL ---
+function buildDashboard() {
+    let html = "";
+    const layouts = [{ title: "MORNING SESSION", start: 0, end: 4 }, { title: "AFTERNOON SESSION", start: 4, end: 8 }];
+    
+    layouts.forEach(lay => {
+        html += `<h3>${lay.title}</h3><div class="table-wrapper"><table><thead><tr><th rowspan="2" class="reg-col">REG</th>`;
+        for(let i=lay.start; i<lay.end; i++) {
+            html += `<th colspan="6" class="p-head" style="background:${pInfo[i].c}">${pInfo[i].h}</th><th rowspan="2" class="course">CRS</th>`;
+        }
+        html += `</tr><tr>`;
+        for(let i=lay.start; i<lay.end; i++) html += `<td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td>`;
+        html += `</tr></thead><tbody>`;
+        
         aircrafts.forEach(r => {
-            let opt = document.createElement('option');
-            opt.value = r;
-            opt.innerHTML = `PK-${r}`;
-            regSelect.appendChild(opt);
+            html += `<tr><td class="reg-col">PK-${r}</td>`;
+            for(let i=lay.start; i<lay.end; i++) {
+                const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk'];
+                fields.forEach(f => html += `<td id="${r}-${i}-${f}">-</td>`);
+                
+                // BAGIAN INI DIUBAH: Kosongkan teks default agar standby
+                html += `<td class="course" id="${r}-${i}-crs"></td>`; 
+            }
+            html += `</tr>`;
         });
-    }
-}
-
-function saveData() {
-    const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
-    const r = document.getElementById('reg').value;
-    const p = document.getElementById('period').value;
-    
-    const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
-    fields.forEach(f => {
-        db[`${r}-${p}-${f}`] = document.getElementById(f).value;
+        html += `</tbody></table></div>`;
     });
-
-    localStorage.setItem('flightDB', JSON.stringify(db));
-    alert(`Success! PK-${r} Period ${parseInt(p)+1} updated.`);
+    document.getElementById('display').innerHTML = html;
+    loadData();
 }
 
-// --- FUNGSI UNTUK DASHBOARD (DISPLAY) ---
-function loadDashboardData() {
+// --- MODIFIKASI PADA FUNGSI LOAD DATA ---
+function loadData() {
     const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
     
+    // Pastikan data CRS juga ikut ter-update dari memory
     aircrafts.forEach(r => {
         for (let p = 0; p < 8; p++) {
-            const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
-            fields.forEach(f => {
-                const cellId = `${r}-${p}-${f}`;
-                const el = document.getElementById(cellId);
-                if (el) {
-                    const val = db[cellId] || "-";
-                    el.innerText = val;
-                    
-                    // Auto-highlight jika "OK"
-                    if (f === 'rmk' && val.toUpperCase() === 'OK') {
-                        el.classList.add('status-ok');
-                    } else if (f === 'rmk') {
-                        el.classList.remove('status-ok');
-                    }
-                }
+            // Update kolom reguler
+            ['fi', 'std', 'exc', 'off', 'on', 'rmk'].forEach(f => {
+                const el = document.getElementById(`${r}-${p}-${f}`);
+                if(el) el.innerText = db[`${r}-${p}-${f}`] || "-";
             });
+            
+            // Update kolom CRS
+            const crsEl = document.getElementById(`${r}-${p}-crs`);
+            if(crsEl) {
+                crsEl.innerText = db[`${r}-${p}-crs`] || ""; // Jika kosong di admin, tetap kosong di dashboard
+            }
         }
     });
-}
-
-// Inisialisasi saat halaman dibuka
-window.onload = () => {
-    if (document.getElementById('reg')) initAdminForm(); // Jika di halaman admin
-    if (document.getElementById('display')) loadDashboardData(); // Jika di dashboard
-};
-
-// Update Dashboard secara Real-time setiap 5 detik
-if (window.location.href.includes('index.html')) {
-    setInterval(loadDashboardData, 5000);
 }
