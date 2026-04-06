@@ -65,24 +65,6 @@ function saveData(date) {
     document.getElementById('exc').value = "";
 }
 }
-
-// --- FUNGSI LOAD & SYNC DATA ---
-function loadData() {
-    const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
-    
-    aircrafts.forEach(r => {
-        for (let p = 0; p < 8; p++) {
-            // Update sel tabel FI, STD, EXC
-            ['fi', 'std', 'exc', 'off', 'on', 'rmk'].forEach(f => {
-                const cell = document.getElementById(`${r}-${p}-${f}`);
-                if(cell) cell.innerText = db[`${r}-${p}-${f}`] || "-";
-            });
-            // Update sel CRS
-            const crsCell = document.getElementById(`${r}-${p}-crs`);
-            if(crsCell) crsCell.innerText = db[`${r}-${p}-crs`] || "";
-        }
-    });
-}
 function loadData() {
     // Ambil tanggal yang dipilih di Dashboard (buat input date di index.html dengan id="dash-date")
     const selectedDate = document.getElementById('dash-date').value;
