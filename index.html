@@ -3,69 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Operations Schedule</title>
+    <title>Flight Training Schedule - Monday, 2 March 2026</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
-        .container { max-width: 900px; margin: auto; }
-        h2 { text-align: center; color: #00d4ff; text-transform: uppercase; letter-spacing: 2px; }
+        :root {
+            --primary-bg: #f4f7f6;
+            --header-bg: #2c3e50;
+            --period-1-2: #e74c3c; /* Merah seperti di gambar */
+            --period-3: #2980b9;   /* Biru */
+            --rest-period: #16a085; /* Hijau Toska */
+            --period-4-5: #d35400; /* Oranye */
+            --period-6: #27ae60;   /* Hijau */
+        }
+
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--primary-bg); margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { margin: 0; color: var(--header-bg); }
+
+        .table-container { overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        table { width: 100%; border-collapse: collapse; background: #2d2d2d; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #444; }
-        th { background-color: #0056b3; color: white; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12px; }
+
+        /* Styling Header Periode */
+        .period-header { color: white; font-weight: bold; text-transform: uppercase; }
+        .p1 { background-color: var(--period-1-2); }
+        .p3 { background-color: var(--period-3); }
+        .p-rest { background-color: var(--rest-period); }
+        .p4 { background-color: var(--period-4-5); }
+
+        /* Sub-header (A/C REG, F.I, STUDENT, etc) */
+        .sub-header { background: #eee; font-weight: bold; }
+
+        /* Warna Status */
+        .status-ok { background: #2ecc71; color: white; font-weight: bold; border-radius: 4px; }
+        .reg-col { background: #f9f9f9; font-weight: bold; width: 80px; }
         
-        .status { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.85em; }
-        .on-time { background: #28a745; }
-        .delayed { background: #dc3545; }
-        .departed { background: #6c757d; }
-        
-        tr:hover { background-color: #3d3d3d; transition: 0.3s; }
+        .course-col { background: #d1ecf1; font-weight: bold; color: #0c5460; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Flight Operations Board</h2>
-    <table id="flightTable">
-        <thead>
-            <tr>
-                <th>Waktu</th>
-                <th>Penerbangan</th>
-                <th>Tujuan</th>
-                <th>Gate</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-    </table>
+<div class="header">
+    <h2>FLIGHT OPERATIONS SCHEDULE</h2>
+    <div style="text-align: right;">
+        <strong>Monday, 2 March 2026</strong><br>
+        <small>Timezone: UTC</small>
+    </div>
 </div>
 
-<script>
-    // Data dummy penerbangan
-    const flights = [
-        { id: "GA101", dest: "Bali (DPS)", time: "10:00", gate: "D3", status: "On Time", class: "on-time" },
-        { id: "ID652", dest: "Surabaya (SUB)", time: "10:45", gate: "C1", status: "Delayed", class: "delayed" },
-        { id: "JT889", dest: "Medan (KNO)", time: "11:20", gate: "B5", status: "Departed", class: "departed" },
-        { id: "QZ202", dest: "Kuala Lumpur (KUL)", time: "12:00", gate: "A2", status: "On Time", class: "on-time" }
-    ];
-
-    const tableBody = document.querySelector("#flightTable tbody");
-
-    // Fungsi untuk menampilkan data ke tabel
-    function renderFlights() {
-        tableBody.innerHTML = flights.map(f => `
+<div class="table-container">
+    <table>
+        <thead>
             <tr>
-                <td><strong>${f.time}</strong></td>
-                <td>${f.id}</td>
-                <td>${f.dest}</td>
-                <td>${f.gate}</td>
-                <td><span class="status ${f.class}">${f.status}</span></td>
+                <th rowspan="2" class="sub-header">A/C REG</th>
+                <th colspan="7" class="period-header p1">1ST PERIOD ( 01:00 - 02:00 ) UTC</th>
+                <th rowspan="2" class="sub-header">COURSE</th>
+                <th colspan="7" class="period-header p1">2ND PERIOD ( 02:30 - 03:30 ) UTC</th>
             </tr>
-        `).join('');
-    }
-
-    renderFlights();
-</script>
+            <tr class="sub-header">
+                <td>F.I</td><td>STUDENT</td><td>EXC</td><td>B.OFF</td><td>B.ON</td><td>RMK</td><td>NO</td>
+                <td>F.I</td><td>STUDENT</td><td>EXC</td><td>B.OFF</td><td>B.ON</td><td>RMK</td><td>NO</td>
+            </tr>
+        </thead>
+        <tbody id="scheduleBody">
+            <tr>
+                <td class="reg-col">PK - AEA</td>
+                <td>-</td><td>RAFLY</td><td>B15</td><td>01:30</td><td>02:30</td><td class="status-ok">OK</td><td>2</td>
+                <td class="course-col">PNB 7</td>
+                <td>-</td><td>ALMER</td><td>B11</td><td>03:00</td><td>04:00</td><td class="status-ok">OK</td><td>5</td>
+            </tr>
+            <tr>
+                <td class="reg-col">PK - AEK</td>
+                <td>FD</td><td>JORDAN</td><td>F1</td><td>-</td><td>-</td><td>2.1</td><td>-</td>
+                <td class="course-col">PNB 7</td>
+                <td>-</td><td>SALSABILA</td><td>CC23</td><td>02:30</td><td>03:30</td><td class="status-ok">OK</td><td>4</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
