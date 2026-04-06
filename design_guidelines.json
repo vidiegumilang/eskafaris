@@ -1,0 +1,75 @@
+{
+  "theme": "Light",
+  "archetype": "Modern Aviation Control (Adapted Archetype 4)",
+  "colors": {
+    "primary": "#0B192C",
+    "secondary": "#F4A261",
+    "background": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "text_primary": "#0B192C",
+    "text_secondary": "#475569",
+    "border": "#E2E8F0",
+    "status_colors": {
+      "PPL": { "bg": "#E0F2FE", "text": "#0284C7" },
+      "CPL": { "bg": "#FFEDD5", "text": "#C2410C" },
+      "IR": { "bg": "#F3E8FF", "text": "#7E22CE" },
+      "FIC": { "bg": "#DCFCE7", "text": "#15803D" },
+      "ME": { "bg": "#FEE2E2", "text": "#B91C1C" }
+    }
+  },
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Plus Jakarta Sans",
+    "hierarchy": {
+      "h1": "text-4xl tracking-tight font-semibold text-primary",
+      "h2": "text-2xl tracking-tight font-medium text-primary",
+      "h3": "text-xl font-medium text-primary",
+      "body": "text-sm text-text_secondary leading-relaxed",
+      "small": "text-xs text-text_secondary uppercase tracking-[0.2em]"
+    }
+  },
+  "layout": {
+    "strategy": "The 'Control Room' Grid",
+    "sidebar": "w-64 bg-[#0B192C] text-white hidden md:flex flex-col h-screen fixed border-r border-[#1A2B4C]",
+    "main_content": "ml-0 md:ml-64 p-6 md:p-8 bg-[#F8FAFC] min-h-screen",
+    "table_container": "bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden"
+  },
+  "components": {
+    "table": "High-density SaaS table pattern. Use condensed heights (40px) for rows. Sticky header with bg-slate-50. Limit initial columns to essentials. Wrap in a card with subtle shadow.",
+    "badges": "Rounded-full px-2.5 py-0.5 text-xs font-semibold. Use status_colors mapped above for PPL, CPL, IR, FIC, and ME stages.",
+    "buttons": {
+      "primary": "bg-[#F4A261] text-white hover:bg-[#E78A43] transition-colors rounded-lg px-4 py-2 font-medium shadow-sm",
+      "outline": "border border-slate-200 text-[#0B192C] hover:bg-slate-50 transition-colors rounded-lg px-4 py-2 font-medium"
+    },
+    "cards": "bg-white border border-slate-200 rounded-xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+  },
+  "interactions": {
+    "hover": "Subtle background shifts (e.g., hover:bg-slate-50 for table rows).",
+    "focus": "focus:ring-2 focus:ring-[#F4A261]/50 focus:outline-none"
+  },
+  "media": {
+    "images": [
+      {
+        "category": "login_background",
+        "url": "https://images.unsplash.com/photo-1723104450759-c83b0bddebe9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzF8MHwxfHNlYXJjaHwyfHxwaWxvdCUyMGRhc2hib2FyZCUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc1NDc1NzQ5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Cockpit view for immersive login screen background"
+      },
+      {
+        "category": "aviation_theme_placeholder",
+        "url": "https://images.unsplash.com/photo-1764547167905-41784e3ce0da?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxhdmlhdGlvbiUyMHRyYWluaW5nJTIwcGxhbmUlMjBmbGlnaHR8ZW58MHx8fHwxNzc1NDc1NzQ5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Small airplane taxiing, useful for empty states or dashboard welcome card"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Build a sidebar layout. Sidebar uses Navy (#0B192C) with white text, and Soft Orange (#F4A261) for active states/CTAs.",
+    "Implement a dense schedule board (table) supporting list/table view per period. Follow high-density table patterns: sticky headers, condensed rows.",
+    "Implement CRUD forms for Instructors, Students, Aircraft, and Stages using Shadcn Dialog, Form, and Select components.",
+    "Create a notification center/dropdown for License Expiry alerts (highlight instructors/students expiring next month).",
+    "Use the exact color-coded badges provided in the colors.status_colors section for flight stages (PPL, CPL, IR, FIC, ME).",
+    "Add a filter for aircraft based on their insurance status.",
+    "Add 'data-testid' attributes to all interactive elements for robust automated testing.",
+    "Install and use 'lucide-react' for all icons (e.g., plane, users, calendar, bell).",
+    "All forms and interactive UI elements must use the required Shadcn components, explicitly customized to the Light theme colors specified."
+  ]
+}
