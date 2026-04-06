@@ -3,106 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Schedule PK-AEA to PK-AER</title>
+    <title>Flight Schedule Stacked View</title>
     <style>
         :root {
             --p12: #e74c3c; --p3: #2980b9; --prest: #16a085; 
             --p45: #d35400; --p67: #27ae60; --p8: #8e44ad;
+            --header-dark: #2c3e50;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaedf1; margin: 0; padding: 15px; }
         
+        h2 { margin: 10px 0; color: var(--header-dark); text-align: center; font-size: 1.5rem; }
+
+        .section-title { 
+            background: var(--header-dark); color: white; padding: 8px 15px; 
+            border-radius: 5px 5px 0 0; font-weight: bold; margin-top: 20px;
+            display: inline-block; font-size: 14px;
+        }
+
         .table-wrapper { 
-            overflow-x: auto; 
-            background: white; 
-            border-radius: 10px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            max-height: 85vh;
+            background: white; border-radius: 0 5px 5px 5px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 25px; overflow-x: auto; 
         }
 
-        table { width: 100%; border-collapse: collapse; min-width: 3000px; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
         
-        /* Sticky Header & Column */
-        thead tr:first-child th { position: sticky; top: 0; z-index: 20; }
-        thead tr:nth-child(2) td { position: sticky; top: 40px; z-index: 20; background: #f8f9fa; }
-        
-        td:first-child, th:first-child { 
-            position: sticky; left: 0; z-index: 30; 
-            background: #2c3e50 !important; color: white; 
-            width: 100px; font-weight: bold; border-right: 2px solid #1a252f;
-        }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; font-size: 11px; }
 
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 11px; }
+        /* Color Headers */
+        .p-head { color: white; font-weight: bold; }
+        .sub-head { background: #f1f1f1; font-weight: bold; }
+        .reg-col { background: #34495e; color: white; font-weight: bold; width: 70px; }
+        .course { background: #d1ecf1; width: 50px; font-weight: bold; }
 
-        /* Period Styling */
-        .p-head { color: white; font-weight: bold; height: 40px; }
-        .sub-head { font-weight: bold; background: #f8f9fa; }
-        .course { background: #d1ecf1; width: 60px; font-weight: bold; }
-
-        /* Row Colors */
-        tr:nth-child(even) { background-color: #fafafa; }
-        tr:hover { background-color: #f1f8ff; }
-
-        /* Status OK Green */
-        .cell-ok { background: #2ecc71; color: white; font-weight: bold; border-radius: 3px; }
+        /* Zebra Row */
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #fff9e6; }
     </style>
 </head>
 <body>
 
-<div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
-    <h2 style="margin:0; color: #2c3e50;">FLIGHT TRAINING OPERATIONS: PK-AEA - PK-AER</h2>
-    <div style="text-align:right;"><strong>Monday, 2 March 2026</strong></div>
-</div>
+<h2>FLIGHT TRAINING SCHEDULE - MONDAY, 2 MARCH 2026</h2>
 
+<div class="section-title">MORNING SESSION (P1 - REST)</div>
 <div class="table-wrapper">
     <table>
         <thead>
             <tr>
-                <th>REG</th>
+                <th rowspan="2" class="reg-col">REG</th>
                 <th colspan="7" style="background:var(--p12)" class="p-head">1ST (01:00-02:00)</th><th class="course">CRS</th>
                 <th colspan="7" style="background:var(--p12)" class="p-head">2ND (02:30-03:30)</th><th class="course">CRS</th>
                 <th colspan="7" style="background:var(--p3)" class="p-head">3RD (04:00-05:00)</th><th class="course">CRS</th>
-                <th colspan="7" style="background:var(--prest)" class="p-head">REST (05:00-06:00)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--prest)" class="p-head">REST (05:00-06:00)</th>
+            </tr>
+            <tr class="sub-head">
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
+            </tr>
+        </thead>
+        <tbody id="table-morning"></tbody>
+    </table>
+</div>
+
+<div class="section-title">AFTERNOON SESSION (P4 - P8)</div>
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2" class="reg-col">REG</th>
                 <th colspan="7" style="background:var(--p45)" class="p-head">4TH (06:30-07:30)</th><th class="course">CRS</th>
                 <th colspan="7" style="background:var(--p45)" class="p-head">5TH (08:00-09:00)</th><th class="course">CRS</th>
                 <th colspan="7" style="background:var(--p67)" class="p-head">6TH (09:30-10:30)</th><th class="course">CRS</th>
                 <th colspan="7" style="background:var(--p8)" class="p-head">7TH (11:00-12:00)</th>
             </tr>
             <tr class="sub-head">
-                <td>A/C REG</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
-                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
             </tr>
         </thead>
-        <tbody id="main-table-body">
-            </tbody>
+        <tbody id="table-afternoon"></tbody>
     </table>
 </div>
 
 <script>
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
-    const tbody = document.getElementById('main-table-body');
+    
+    function generateRows(targetId, blockCount) {
+        const tbody = document.getElementById(targetId);
+        aircrafts.forEach(reg => {
+            let row = `<tr><td class="reg-col">PK-${reg}</td>`;
+            for (let i = 0; i < blockCount; i++) {
+                row += `<td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
+                if (i < blockCount - 1) row += `<td class="course">PNB 7</td>`;
+            }
+            row += `</tr>`;
+            tbody.innerHTML += row;
+        });
+    }
 
-    aircrafts.forEach(reg => {
-        let row = `<tr><td>PK-${reg}</td>`;
-        
-        // Buat 8 blok periode kosong untuk setiap pesawat
-        for (let i = 0; i < 8; i++) {
-            row += `
-                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                ${i < 7 ? '<td class="course">PNB 7</td>' : ''} 
-            `;
-        }
-        
-        row += `</tr>`;
-        tbody.innerHTML += row;
-    });
+    // Generate 4 blok untuk tabel atas, 4 blok untuk tabel bawah
+    generateRows('table-morning', 4);
+    generateRows('table-afternoon', 4);
 </script>
 
 </body>
