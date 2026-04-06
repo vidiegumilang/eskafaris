@@ -3,84 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Training Schedule - Monday, 2 March 2026</title>
+    <title>Flight Schedule PK-AEA to PK-AER</title>
     <style>
         :root {
-            --primary-bg: #f4f7f6;
-            --header-bg: #2c3e50;
-            --period-1-2: #e74c3c; /* Merah seperti di gambar */
-            --period-3: #2980b9;   /* Biru */
-            --rest-period: #16a085; /* Hijau Toska */
-            --period-4-5: #d35400; /* Oranye */
-            --period-6: #27ae60;   /* Hijau */
+            --p12: #e74c3c; --p3: #2980b9; --prest: #16a085; 
+            --p45: #d35400; --p67: #27ae60; --p8: #8e44ad;
         }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--primary-bg); margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { margin: 0; color: var(--header-bg); }
-
-        .table-container { overflow-x: auto; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12px; }
+        .table-wrapper { 
+            overflow-x: auto; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            max-height: 85vh;
+        }
 
-        /* Styling Header Periode */
-        .period-header { color: white; font-weight: bold; text-transform: uppercase; }
-        .p1 { background-color: var(--period-1-2); }
-        .p3 { background-color: var(--period-3); }
-        .p-rest { background-color: var(--rest-period); }
-        .p4 { background-color: var(--period-4-5); }
-
-        /* Sub-header (A/C REG, F.I, STUDENT, etc) */
-        .sub-header { background: #eee; font-weight: bold; }
-
-        /* Warna Status */
-        .status-ok { background: #2ecc71; color: white; font-weight: bold; border-radius: 4px; }
-        .reg-col { background: #f9f9f9; font-weight: bold; width: 80px; }
+        table { width: 100%; border-collapse: collapse; min-width: 3000px; table-layout: fixed; }
         
-        .course-col { background: #d1ecf1; font-weight: bold; color: #0c5460; }
+        /* Sticky Header & Column */
+        thead tr:first-child th { position: sticky; top: 0; z-index: 20; }
+        thead tr:nth-child(2) td { position: sticky; top: 40px; z-index: 20; background: #f8f9fa; }
+        
+        td:first-child, th:first-child { 
+            position: sticky; left: 0; z-index: 30; 
+            background: #2c3e50 !important; color: white; 
+            width: 100px; font-weight: bold; border-right: 2px solid #1a252f;
+        }
+
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 11px; }
+
+        /* Period Styling */
+        .p-head { color: white; font-weight: bold; height: 40px; }
+        .sub-head { font-weight: bold; background: #f8f9fa; }
+        .course { background: #d1ecf1; width: 60px; font-weight: bold; }
+
+        /* Row Colors */
+        tr:nth-child(even) { background-color: #fafafa; }
+        tr:hover { background-color: #f1f8ff; }
+
+        /* Status OK Green */
+        .cell-ok { background: #2ecc71; color: white; font-weight: bold; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2>FLIGHT OPERATIONS SCHEDULE</h2>
-    <div style="text-align: right;">
-        <strong>Monday, 2 March 2026</strong><br>
-        <small>Timezone: UTC</small>
-    </div>
+<div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <h2 style="margin:0; color: #2c3e50;">FLIGHT TRAINING OPERATIONS: PK-AEA - PK-AER</h2>
+    <div style="text-align:right;"><strong>Monday, 2 March 2026</strong></div>
 </div>
 
-<div class="table-container">
+<div class="table-wrapper">
     <table>
         <thead>
             <tr>
-                <th rowspan="2" class="sub-header">A/C REG</th>
-                <th colspan="7" class="period-header p1">1ST PERIOD ( 01:00 - 02:00 ) UTC</th>
-                <th rowspan="2" class="sub-header">COURSE</th>
-                <th colspan="7" class="period-header p1">2ND PERIOD ( 02:30 - 03:30 ) UTC</th>
+                <th>REG</th>
+                <th colspan="7" style="background:var(--p12)" class="p-head">1ST (01:00-02:00)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p12)" class="p-head">2ND (02:30-03:30)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p3)" class="p-head">3RD (04:00-05:00)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--prest)" class="p-head">REST (05:00-06:00)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p45)" class="p-head">4TH (06:30-07:30)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p45)" class="p-head">5TH (08:00-09:00)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p67)" class="p-head">6TH (09:30-10:30)</th><th class="course">CRS</th>
+                <th colspan="7" style="background:var(--p8)" class="p-head">7TH (11:00-12:00)</th>
             </tr>
-            <tr class="sub-header">
-                <td>F.I</td><td>STUDENT</td><td>EXC</td><td>B.OFF</td><td>B.ON</td><td>RMK</td><td>NO</td>
-                <td>F.I</td><td>STUDENT</td><td>EXC</td><td>B.OFF</td><td>B.ON</td><td>RMK</td><td>NO</td>
+            <tr class="sub-head">
+                <td>A/C REG</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td><td>-</td>
+                <td>FI</td><td>STUDENT</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td><td>NO</td>
             </tr>
         </thead>
-        <tbody id="scheduleBody">
-            <tr>
-                <td class="reg-col">PK - AEA</td>
-                <td>-</td><td>RAFLY</td><td>B15</td><td>01:30</td><td>02:30</td><td class="status-ok">OK</td><td>2</td>
-                <td class="course-col">PNB 7</td>
-                <td>-</td><td>ALMER</td><td>B11</td><td>03:00</td><td>04:00</td><td class="status-ok">OK</td><td>5</td>
-            </tr>
-            <tr>
-                <td class="reg-col">PK - AEK</td>
-                <td>FD</td><td>JORDAN</td><td>F1</td><td>-</td><td>-</td><td>2.1</td><td>-</td>
-                <td class="course-col">PNB 7</td>
-                <td>-</td><td>SALSABILA</td><td>CC23</td><td>02:30</td><td>03:30</td><td class="status-ok">OK</td><td>4</td>
-            </tr>
-        </tbody>
+        <tbody id="main-table-body">
+            </tbody>
     </table>
 </div>
+
+<script>
+    const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
+    const tbody = document.getElementById('main-table-body');
+
+    aircrafts.forEach(reg => {
+        let row = `<tr><td>PK-${reg}</td>`;
+        
+        // Buat 8 blok periode kosong untuk setiap pesawat
+        for (let i = 0; i < 8; i++) {
+            row += `
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                ${i < 7 ? '<td class="course">PNB 7</td>' : ''} 
+            `;
+        }
+        
+        row += `</tr>`;
+        tbody.innerHTML += row;
+    });
+</script>
 
 </body>
 </html>
