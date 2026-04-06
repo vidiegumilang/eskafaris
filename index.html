@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Schedule Stacked View</title>
+    <title>Flight Schedule Interactive Input</title>
     <style>
         :root {
             --p12: #e74c3c; --p3: #2980b9; --prest: #16a085; 
@@ -12,39 +12,70 @@
         }
 
         body { font-family: 'Segoe UI', sans-serif; background: #eaedf1; margin: 0; padding: 15px; }
-        
-        h2 { margin: 10px 0; color: var(--header-dark); text-align: center; font-size: 1.5rem; }
+        h2 { text-align: center; color: var(--header-dark); margin-bottom: 20px; }
 
         .section-title { 
             background: var(--header-dark); color: white; padding: 8px 15px; 
-            border-radius: 5px 5px 0 0; font-weight: bold; margin-top: 20px;
-            display: inline-block; font-size: 14px;
+            border-radius: 5px 5px 0 0; font-weight: bold; margin-top: 20px; display: inline-block;
         }
 
         .table-wrapper { 
             background: white; border-radius: 0 5px 5px 5px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            margin-bottom: 25px; overflow-x: auto; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 25px; overflow-x: auto; 
         }
 
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
-        
-        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; font-size: 11px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; table-layout: fixed; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; font-size: 11px; outline: none; }
 
-        /* Color Headers */
+        /* Style untuk sel yang bisa diedit */
+        td[contenteditable="true"]:focus {
+            background: #fff9e6;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border: 1px solid #3498db;
+        }
+
         .p-head { color: white; font-weight: bold; }
         .sub-head { background: #f1f1f1; font-weight: bold; }
-        .reg-col { background: #34495e; color: white; font-weight: bold; width: 70px; }
-        .course { background: #d1ecf1; width: 50px; font-weight: bold; }
+        .reg-col { background: #34495e !important; color: white; font-weight: bold; width: 70px; }
+        .course { background: #d1ecf1 !important; width: 60px; font-weight: bold; }
 
         /* Zebra Row */
         tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #fff9e6; }
+        
+        /* Tombol Simpan */
+        .btn-save {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #27ae60; color: white; border: none;
+            padding: 15px 25px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .btn-save:hover { background: #219150; }
     </style>
 </head>
 <body>
 
-<h2>FLIGHT TRAINING SCHEDULE - MONDAY, 2 MARCH 2026</h2>
+<h2>FLIGHT TRAINING OPERATIONS BOARD</h2>
+
+<datalist id="list-fi">
+    <option value="FD - JORDAN">
+    <option value="VR - LORENZO">
+    <option value="GT - STEVIE">
+    <option value="MZ - AZIZ">
+</datalist>
+
+<datalist id="list-student">
+    <option value="RAFLY">
+    <option value="ALMER">
+    <option value="RAFAREL">
+    <option value="SALSABILA">
+    <option value="JORDAN">
+</datalist>
+
+<datalist id="list-course">
+    <option value="PNB 7">
+    <option value="PNB 8">
+    <option value="CPL-IR">
+</datalist>
 
 <div class="section-title">MORNING SESSION (P1 - REST)</div>
 <div class="table-wrapper">
@@ -90,6 +121,8 @@
     </table>
 </div>
 
+<button class="btn-save" onclick="saveData()">SIMPAN JADWAL</button>
+
 <script>
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
     
@@ -98,17 +131,45 @@
         aircrafts.forEach(reg => {
             let row = `<tr><td class="reg-col">PK-${reg}</td>`;
             for (let i = 0; i < blockCount; i++) {
-                row += `<td></td><td></td><td></td><td></td><td></td><td></td><td></td>`;
-                if (i < blockCount - 1) row += `<td class="course">PNB 7</td>`;
+                // Sel yang bisa diedit: FI, STD, EXC, OFF, ON, RMK, NO
+                row += `
+                    <td contenteditable="true" data-type="fi"></td>
+                    <td contenteditable="true" data-type="std"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>`;
+                
+                // Sel Course (hanya ada di antara blok periode)
+                if (i < blockCount - 1 || targetId === 'table-morning') {
+                    row += `<td contenteditable="true" class="course" data-type="course">PNB 7</td>`;
+                }
             }
             row += `</tr>`;
             tbody.innerHTML += row;
         });
     }
 
-    // Generate 4 blok untuk tabel atas, 4 blok untuk tabel bawah
     generateRows('table-morning', 4);
     generateRows('table-afternoon', 4);
+
+    // Fungsi Sederhana Simpan ke Browser (Local Storage)
+    function saveData() {
+        const morningData = document.getElementById('table-morning').innerHTML;
+        const afternoonData = document.getElementById('table-afternoon').innerHTML;
+        localStorage.setItem('flightScheduleMorning', morningData);
+        localStorage.setItem('flightScheduleAfternoon', afternoonData);
+        alert("Jadwal berhasil disimpan di browser ini!");
+    }
+
+    // Load data saat halaman dibuka
+    window.onload = function() {
+        if(localStorage.getItem('flightScheduleMorning')) {
+            document.getElementById('table-morning').innerHTML = localStorage.getItem('flightScheduleMorning');
+            document.getElementById('table-afternoon').innerHTML = localStorage.getItem('flightScheduleAfternoon');
+        }
+    };
 </script>
 
 </body>
