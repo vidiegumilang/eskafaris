@@ -9,24 +9,23 @@
 <body class="admin-body">
 
 <nav>
-    <div style="font-size: 1.2rem;">⚙️ <strong>ADMIN</strong> PANEL</div>
-    <div>
+    <div class="nav-brand">⚙️ ADMIN PANEL</div>
+    <div class="nav-links">
         <a href="index.html">LIHAT DASHBOARD</a>
-        <a href="admin.html" style="border-bottom: 2px solid var(--accent);">INPUT DATA</a>
+        <a href="admin.html" class="active">INPUT DATA</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="admin-card">
         <h2 style="margin-top: 0; color: var(--primary);">Update Flight Entry</h2>
-        <p style="font-size: 0.9rem; color: #666;">Pilih pesawat dan periode untuk memperbarui data di monitor.</p>
+        <p style="font-size: 0.9rem; color: #666;">Silakan perbarui jadwal penerbangan di bawah ini.</p>
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
 
         <div class="input-grid">
             <div class="form-group">
                 <label>1. Registrasi Pesawat</label>
-                <select id="reg">
-                    </select>
+                <select id="reg"></select>
             </div>
             <div class="form-group">
                 <label>2. Pilih Periode</label>
@@ -44,44 +43,23 @@
         </div>
 
         <div class="input-grid">
-            <div class="form-group">
-                <label>3. Instruktur (FI)</label>
-                <input type="text" id="fi" placeholder="Contoh: FD - JORDAN">
-            </div>
-            <div class="form-group">
-                <label>4. Nama Siswa (STD)</label>
-                <input type="text" id="std" placeholder="Nama Siswa">
-            </div>
-            <div class="form-group">
-                <label>5. Stage/Exercise (EXC)</label>
-                <input type="text" id="exc" placeholder="Contoh: B15">
-            </div>
-            <div class="form-group">
-                <label>6. Course (CRS)</label>
-                <input type="text" id="crs" placeholder="Contoh: PNB 7">
-            </div>
+            <div class="form-group"><label>3. Instruktur (FI)</label><input type="text" id="fi" placeholder="JORDAN"></div>
+            <div class="form-group"><label>4. Nama Siswa (STD)</label><input type="text" id="std"></div>
+            <div class="form-group"><label>5. Stage/EXC</label><input type="text" id="exc" placeholder="B15"></div>
+            <div class="form-group"><label>6. Course (CRS)</label><input type="text" id="crs" placeholder="PNB 7"></div>
         </div>
 
         <div class="input-grid">
-            <div class="form-group">
-                <label>Block OFF</label>
-                <input type="time" id="off">
-            </div>
-            <div class="form-group">
-                <label>Block ON</label>
-                <input type="time" id="on">
-            </div>
-            <div class="form-group">
-                <label>Remark (RMK)</label>
-                <input type="text" id="rmk" placeholder="OK / Delay / Maintenance">
-            </div>
+            <div class="form-group"><label>Block OFF</label><input type="time" id="off"></div>
+            <div class="form-group"><label>Block ON</label><input type="time" id="on"></div>
+            <div class="form-group"><label>Remark (RMK)</label><input type="text" id="rmk" placeholder="OK/Maintenance"></div>
         </div>
 
-        <button class="btn-update" onclick="saveData()">Update ke Dashboard</button>
+        <button class="btn-update" onclick="saveData()">Update Dashboard</button>
         
-        <div style="margin-top: 20px; text-align: center;">
-            <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.8rem; text-decoration: underline;">
-                Reset Semua Jadwal (Hapus Semua)
+        <div style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px; text-align: center;">
+            <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; text-decoration: underline; font-size: 12px;">
+                Reset Semua Jadwal
             </button>
         </div>
     </div>
@@ -89,11 +67,10 @@
 
 <script src="script.js"></script>
 <script>
-    // Fungsi tambahan untuk menghapus semua data jika diperlukan
     function clearAllData() {
-        if (confirm("Apakah Anda yakin ingin menghapus SELURUH jadwal?")) {
+        if (confirm("Hapus semua data jadwal?")) {
             localStorage.removeItem('flightDB');
-            alert("Semua data telah dihapus.");
+            alert("Data dikosongkan.");
             location.reload();
         }
     }
