@@ -1,0 +1,110 @@
+/* ROOT VARIABLES - Pengaturan Warna Utama */
+:root {
+    --primary: #2c3e50;
+    --accent: #3498db;
+    --bg-admin: #f0f2f5;
+    --bg-dash: #1a252f;
+    --text-light: #ecf0f1;
+    /* Period Colors */
+    --p12: #e74c3c; --p3: #2980b9; --prest: #16a085; 
+    --p45: #d35400; --p67: #27ae60; --p8: #8e44ad;
+}
+
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+
+/* NAVIGATION BAR */
+nav {
+    background: var(--primary);
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 20px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+nav a:hover { background: rgba(255,255,255,0.1); }
+
+/* TABEL DASHBOARD (index.html) */
+.dashboard-body { background: var(--bg-dash); padding: 15px; color: white; }
+
+.table-wrapper { 
+    background: white; 
+    color: black; 
+    border-radius: 8px; 
+    overflow-x: auto; 
+    margin-bottom: 25px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+table { width: 100%; border-collapse: collapse; min-width: 1200px; table-layout: fixed; }
+
+th, td { border: 1px solid #ddd; padding: 6px; text-align: center; font-size: 11px; }
+
+.reg-col { 
+    background: #34495e !important; 
+    color: white; 
+    font-weight: bold; 
+    width: 70px; 
+    position: sticky; 
+    left: 0; 
+    z-index: 2;
+}
+
+.p-head { color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+.course-col { background: #d1ecf1 !important; font-weight: bold; width: 55px; }
+
+/* ADMIN FORM (admin.html) */
+.admin-body { background: var(--bg-admin); padding: 20px; }
+
+.admin-card { 
+    max-width: 700px; 
+    margin: 20px auto; 
+    background: white; 
+    padding: 30px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+}
+
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--primary); font-size: 13px; }
+
+input, select { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+}
+
+input:focus { border-color: var(--accent); outline: none; background: #fffde7; }
+
+.btn-update { 
+    width: 100%; 
+    padding: 15px; 
+    background: var(--accent); 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: 0.3s;
+}
+
+.btn-update:hover { background: #2980b9; transform: translateY(-2px); }
+
+/* STATUS OK AUTO-HIGHLIGHT */
+.status-ok { background: #27ae60 !important; color: white !important; font-weight: bold; }
