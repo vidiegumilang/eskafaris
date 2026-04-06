@@ -9,33 +9,24 @@
 <body class="admin-body">
 
 <nav>
-    <div class="nav-brand">⚙️ ADMIN PANEL</div>
-    <div class="nav-links">
+    <div style="font-size: 1.2rem;">⚙️ <strong>ADMIN</strong> PANEL</div>
+    <div>
         <a href="index.html">LIHAT DASHBOARD</a>
-        <a href="admin.html" class="active">INPUT DATA</a>
+        <a href="admin.html" style="border-bottom: 2px solid var(--accent);">INPUT DATA</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="admin-card">
         <h2 style="margin-top: 0; color: var(--primary);">Update Flight Entry</h2>
-        <p style="font-size: 0.9rem; color: #666;">Pilih pesawat dan periode, lalu isi detail instruktur dan siswa.</p>
+        <p style="font-size: 0.9rem; color: #666;">Pilih pesawat dan periode untuk memperbarui data di monitor.</p>
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
 
         <div class="input-grid">
             <div class="form-group">
                 <label>1. Registrasi Pesawat</label>
                 <select id="reg">
-                    <option value="AEA">PK-AEA</option><option value="AEB">PK-AEB</option>
-                    <option value="AEC">PK-AEC</option><option value="AED">PK-AED</option>
-                    <option value="AEE">PK-AEE</option><option value="AEF">PK-AEF</option>
-                    <option value="AEG">PK-AEG</option><option value="AEH">PK-AEH</option>
-                    <option value="AEI">PK-AEI</option><option value="AEJ">PK-AEJ</option>
-                    <option value="AEK">PK-AEK</option><option value="AEL">PK-AEL</option>
-                    <option value="AEM">PK-AEM</option><option value="AEN">PK-AEN</option>
-                    <option value="AEO">PK-AEO</option><option value="AEP">PK-AEP</option>
-                    <option value="AEQ">PK-AEQ</option><option value="AER">PK-AER</option>
-                </select>
+                    </select>
             </div>
             <div class="form-group">
                 <label>2. Pilih Periode</label>
@@ -65,13 +56,32 @@
                 <label>5. Stage/Exercise (EXC)</label>
                 <input type="text" id="exc" placeholder="Contoh: B15">
             </div>
+            <div class="form-group">
+                <label>6. Course (CRS)</label>
+                <input type="text" id="crs" placeholder="Contoh: PNB 7">
+            </div>
+        </div>
+
+        <div class="input-grid">
+            <div class="form-group">
+                <label>Block OFF</label>
+                <input type="time" id="off">
+            </div>
+            <div class="form-group">
+                <label>Block ON</label>
+                <input type="time" id="on">
+            </div>
+            <div class="form-group">
+                <label>Remark (RMK)</label>
+                <input type="text" id="rmk" placeholder="OK / Delay / Maintenance">
+            </div>
         </div>
 
         <button class="btn-update" onclick="saveData()">Update ke Dashboard</button>
         
-        <div style="margin-top: 25px; border-top: 1px dashed #ccc; padding-top: 15px; text-align: center;">
-            <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; text-decoration: underline; font-size: 12px;">
-                Reset Semua Jadwal
+        <div style="margin-top: 20px; text-align: center;">
+            <button onclick="clearAllData()" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.8rem; text-decoration: underline;">
+                Reset Semua Jadwal (Hapus Semua)
             </button>
         </div>
     </div>
@@ -79,10 +89,11 @@
 
 <script src="script.js"></script>
 <script>
+    // Fungsi tambahan untuk menghapus semua data jika diperlukan
     function clearAllData() {
-        if (confirm("Hapus semua data jadwal di monitor?")) {
+        if (confirm("Apakah Anda yakin ingin menghapus SELURUH jadwal?")) {
             localStorage.removeItem('flightDB');
-            alert("Data berhasil dikosongkan.");
+            alert("Semua data telah dihapus.");
             location.reload();
         }
     }
