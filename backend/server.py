@@ -369,10 +369,11 @@ async def delete_instructor(iid: str, current_user: dict = Depends(get_current_u
 @api_router.get("/students")
 async def get_students(current_user: dict = Depends(get_current_user)):
     students = await db.students.find({}, {"_id": 0}).to_list(1000)
+    courses_list = await db.courses.find({}, {"_id": 0}).to_list(1000)
+    courses_map = {c["id"]: c for c in courses_list}
     for s in students:
         if s.get("course_id"):
-            course = await db.courses.find_one({"id": s["course_id"]}, {"_id": 0})
-            s["course"] = course
+            s["course"] = courses_map.get(s["course_id"])
     return students
 
 @api_router.post("/students")
@@ -464,9 +465,14 @@ async def delete_stage(sid: str, current_user: dict = Depends(get_current_user))
 @api_router.get("/courses")
 async def get_courses(current_user: dict = Depends(get_current_user)):
     courses = await db.courses.find({}, {"_id": 0}).to_list(1000)
+    all_students = await db.students.find({}, {"_id": 0}).to_list(5000)
+    students_by_course = {}
+    for s in all_students:
+        cid = s.get("course_id")
+        if cid:
+            students_by_course.setdefault(cid, []).append(s)
     for c in courses:
-        students = await db.students.find({"course_id": c["id"]}, {"_id": 0}).to_list(1000)
-        c["students"] = students
+        c["students"] = students_by_course.get(c["id"], [])
     return courses
 
 @api_router.post("/courses")
