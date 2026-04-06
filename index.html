@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Operations Schedule</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        h2 { text-align: center; color: #00d4ff; text-transform: uppercase; letter-spacing: 2px; }
+        
+        table { width: 100%; border-collapse: collapse; background: #2d2d2d; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #444; }
+        th { background-color: #0056b3; color: white; }
+        
+        .status { padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.85em; }
+        .on-time { background: #28a745; }
+        .delayed { background: #dc3545; }
+        .departed { background: #6c757d; }
+        
+        tr:hover { background-color: #3d3d3d; transition: 0.3s; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Flight Operations Board</h2>
+    <table id="flightTable">
+        <thead>
+            <tr>
+                <th>Waktu</th>
+                <th>Penerbangan</th>
+                <th>Tujuan</th>
+                <th>Gate</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // Data dummy penerbangan
+    const flights = [
+        { id: "GA101", dest: "Bali (DPS)", time: "10:00", gate: "D3", status: "On Time", class: "on-time" },
+        { id: "ID652", dest: "Surabaya (SUB)", time: "10:45", gate: "C1", status: "Delayed", class: "delayed" },
+        { id: "JT889", dest: "Medan (KNO)", time: "11:20", gate: "B5", status: "Departed", class: "departed" },
+        { id: "QZ202", dest: "Kuala Lumpur (KUL)", time: "12:00", gate: "A2", status: "On Time", class: "on-time" }
+    ];
+
+    const tableBody = document.querySelector("#flightTable tbody");
+
+    // Fungsi untuk menampilkan data ke tabel
+    function renderFlights() {
+        tableBody.innerHTML = flights.map(f => `
+            <tr>
+                <td><strong>${f.time}</strong></td>
+                <td>${f.id}</td>
+                <td>${f.dest}</td>
+                <td>${f.gate}</td>
+                <td><span class="status ${f.class}">${f.status}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    renderFlights();
+</script>
+
+</body>
+</html>
