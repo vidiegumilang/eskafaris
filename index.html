@@ -2,53 +2,92 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Flight Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Flight Schedule Monitor</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #2c3e50; color: white; padding: 10px; }
-        nav { background: #1a252f; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        nav a { color: #bdc3c7; text-decoration: none; font-size: 14px; }
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg-dash: #1a252f;
+            --text-light: #ecf0f1;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg-dash); color: white; padding: 10px; }
+        
+        /* NAVBAR */
+        nav { 
+            background: #1a252f; 
+            padding: 10px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .nav-brand { font-weight: bold; letter-spacing: 1px; color: var(--accent); }
+        
         .nav-controls { display: flex; align-items: center; gap: 15px; }
-        /* Styling Input Tanggal di Dashboard */
-        #dash-date { padding: 5px; border-radius: 4px; border: none; font-family: inherit; font-weight: bold; cursor: pointer; }
-        .table-wrapper { background: white; color: black; border-radius: 5px; overflow-x: auto; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
-        th, td { border: 1px solid #ddd; padding: 4px; text-align: center; font-size: 10px; }
-        .reg-col { background: #34495e; color: white; font-weight: bold; width: 60px; }
-        .p-head { color: white; font-weight: bold; }
-        .course { background: #d1ecf1; font-weight: bold; width: 45px; }
+        
+        #dash-date { 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            border: none; 
+            font-weight: bold; 
+            background: var(--text-light);
+        }
+
+        nav a { color: #bdc3c7; text-decoration: none; font-size: 14px; border: 1px solid #444; padding: 5px 10px; border-radius: 4px; }
+        nav a:hover { background: var(--primary); color: white; }
+
+        /* TABEL */
+        .table-wrapper { background: white; color: black; border-radius: 8px; overflow-x: auto; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; table-layout: fixed; }
+        
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: center; font-size: 11px; height: 25px; }
+        
+        .reg-col { background: #34495e !important; color: white; font-weight: bold; width: 70px; position: sticky; left: 0; z-index: 2; }
+        
+        .p-head { color: white; font-weight: bold; text-transform: uppercase; }
+        
+        .course { background: #d1ecf1 !important; font-weight: bold; width: 55px; }
+
+        h3 { margin: 15px 0 10px 5px; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 10px; }
+
+        /* STATUS OK */
+        .status-ok { background: #2ecc71 !important; color: white !important; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div><strong>FLIGHT OPS MONITOR</strong></div>
+    <div class="nav-brand">✈️ FLIGHT OPS MONITOR</div>
     <div class="nav-controls">
-        <label for="dash-date">VIEW DATE:</label>
+        <label for="dash-date" style="font-size: 12px;">VIEW DATE:</label>
         <input type="date" id="dash-date" onchange="loadData()">
-        <a href="admin.html">⚙️ SETTINGS</a>
+        <a href="admin.html">⚙️ ADMIN SETTINGS</a>
     </div>
 </nav>
 
 <div id="display"></div>
 
 <script>
-    // Set default tanggal hari ini saat pertama kali buka
-    document.getElementById('dash-date').valueAsDate = new Date();
-
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
     const pInfo = [
         {h: "1ST (01-02)", c: "#e74c3c"}, {h: "2ND (02:30-03:30)", c: "#e74c3c"},
         {h: "3RD (04-05)", c: "#2980b9"}, {h: "REST (05-06)", c: "#16a085"},
         {h: "4TH (06:30-07:30)", c: "#d35400"}, {h: "5TH (08-09)", c: "#d35400"},
-        {h: "6TH (09:30-10:30)", c: "#27ae60"}, {h: "7TH (11-12)", c: "#8e44ad"}
+        {h: "6TH (09-10)", c: "#27ae60"}, {h: "7TH (11-12)", c: "#8e44ad"}
     ];
 
+    // 1. Fungsi Membuat Struktur Tabel
     function buildTable() {
         let html = "";
-        const sessions = [{t: "MORNING", s: 0, e: 4}, {t: "AFTERNOON", s: 4, e: 8}];
+        const sessions = [{t: "MORNING SESSION", s: 0, e: 4}, {t: "AFTERNOON SESSION", s: 4, e: 8}];
         
         sessions.forEach(sess => {
-            html += `<h4 style="margin: 10px 0;">${sess.t} SESSION</h4>`;
+            html += `<h3>${sess.t}</h3>`;
             html += `<div class="table-wrapper"><table><thead><tr><th rowspan="2" class="reg-col">REG</th>`;
             for(let i=sess.s; i<sess.e; i++) {
                 html += `<th colspan="6" class="p-head" style="background:${pInfo[i].c}">${pInfo[i].h}</th><th rowspan="2" class="course">CRS</th>`;
@@ -56,13 +95,13 @@
             html += `</tr><tr>`;
             for(let i=sess.s; i<sess.e; i++) html += `<td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td>`;
             html += `</tr></thead><tbody>`;
+            
             aircrafts.forEach(r => {
                 html += `<tr><td class="reg-col">PK-${r}</td>`;
                 for(let i=sess.s; i<sess.e; i++) {
                     const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk'];
-                    // ID tetap sederhana tanpa tanggal agar mudah dimanipulasi DOM
                     fields.forEach(f => html += `<td id="${r}-${i}-${f}">-</td>`);
-                    html += `<td class="course" id="${r}-${i}-crs">-</td>`;
+                    html += `<td class="course" id="${r}-${i}-crs"></td>`; // CRS Kosong standby admin
                 }
                 html += `</tr>`;
             });
@@ -72,49 +111,44 @@
         loadData();
     }
 
+    // 2. Fungsi Mengambil Data Berdasarkan Tanggal
     function loadData() {
         const data = JSON.parse(localStorage.getItem('flightDB') || '{}');
         const selectedDate = document.getElementById('dash-date').value;
 
-        // Bersihkan tabel dulu sebelum load data tanggal yang dipilih
+        // Loop setiap pesawat dan setiap periode
         aircrafts.forEach(r => {
             for(let i=0; i<8; i++) {
                 const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
                 fields.forEach(f => {
                     const cell = document.getElementById(`${r}-${i}-${f}`);
                     if(cell) {
-                        cell.innerText = "-";
-                        cell.style.background = ""; // Reset warna OK
-                        cell.style.color = "";
+                        // Alamat data di localStorage: TANGGAL-REG-PERIODE-KOLOM
+                        const storageKey = `${selectedDate}-${r}-${i}-${f}`;
+                        const val = data[storageKey] || "-";
+                        
+                        cell.innerText = val;
+
+                        // Logika Warna OK
+                        if(f === 'rmk' && val.toUpperCase() === "OK") {
+                            cell.classList.add('status-ok');
+                        } else if(f === 'rmk') {
+                            cell.classList.remove('status-ok');
+                        }
                     }
                 });
             }
         });
-
-        // Load data berdasarkan filter tanggal: TANGGAL-REG-PERIODE-KOLOM
-        Object.keys(data).forEach(storageKey => {
-            // Cek apakah key diawali dengan tanggal yang dipilih
-            if (storageKey.startsWith(selectedDate)) {
-                // Ambil bagian ID elemen (buang string tanggalnya)
-                const elementId = storageKey.replace(`${selectedDate}-`, "");
-                const el = document.getElementById(elementId);
-                
-                if(el) {
-                    const val = data[storageKey];
-                    el.innerText = val || "-";
-                    
-                    // Style khusus jika Remark "OK"
-                    if(elementId.endsWith('rmk') && val.toUpperCase() === "OK") {
-                        el.style.background = "#2ecc71";
-                        el.style.color = "white";
-                    }
-                }
-            }
-        });
     }
 
-    window.onload = buildTable;
-    // Auto sync data setiap 5 detik
+    // 3. Inisialisasi Saat Halaman Dibuka
+    window.onload = () => {
+        // Set default tanggal hari ini
+        document.getElementById('dash-date').valueAsDate = new Date();
+        buildTable();
+    };
+
+    // 4. Auto Sync setiap 5 detik
     setInterval(loadData, 5000);
 </script>
 </body>
