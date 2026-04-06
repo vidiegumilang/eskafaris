@@ -2,26 +2,78 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Operations Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dashboard - Flight Schedule</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #2c3e50; color: white; padding: 10px; }
+        nav { background: #1a252f; padding: 10px 20px; display: flex; justify-content: space-between; margin-bottom: 10px; }
+        nav a { color: #bdc3c7; text-decoration: none; font-size: 14px; }
+        .table-wrapper { background: white; color: black; border-radius: 5px; overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
+        th, td { border: 1px solid #ddd; padding: 4px; text-align: center; font-size: 10px; }
+        .reg-col { background: #34495e; color: white; font-weight: bold; width: 60px; }
+        .p-head { color: white; font-weight: bold; }
+        .course { background: #d1ecf1; font-weight: bold; width: 45px; }
+    </style>
 </head>
-<body class="dashboard-body">
+<body>
 
 <nav>
-    <div class="nav-brand">🚀 FLIGHT OPS MONITOR</div>
-    <div class="nav-links">
-        <a href="index.html" class="active">DASHBOARD</a>
-        <a href="admin.html">ADMIN SETTINGS</a>
-    </div>
+    <div><strong>FLIGHT OPS MONITOR</strong></div>
+    <a href="admin.html">⚙️ SETTINGS</a>
 </nav>
 
-<div class="container">
-    <h2 style="text-align:center; color: white; margin-bottom: 10px;">FLIGHT TRAINING SCHEDULE</h2>
-    <p style="text-align:center; color: #aaa; margin-bottom: 20px;">Monday, 2 March 2026</p>
-    <div id="display"></div>
-</div>
+<div id="display"></div>
 
-<script src="script.js"></script>
+<script>
+    const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
+    const pInfo = [
+        {h: "1ST (01-02)", c: "#e74c3c"}, {h: "2ND (02:30-03:30)", c: "#e74c3c"},
+        {h: "3RD (04-05)", c: "#2980b9"}, {h: "REST (05-06)", c: "#16a085"},
+        {h: "4TH (06:30-07:30)", c: "#d35400"}, {h: "5TH (08-09)", c: "#d35400"},
+        {h: "6TH (09:30-10:30)", c: "#27ae60"}, {h: "7TH (11-12)", c: "#8e44ad"}
+    ];
+
+    function buildTable() {
+        let html = "";
+        const sessions = [{t: "MORNING", s: 0, e: 4}, {t: "AFTERNOON", s: 4, e: 8}];
+        
+        sessions.forEach(sess => {
+            html += `<div class="table-wrapper"><table><thead><tr><th rowspan="2" class="reg-col">REG</th>`;
+            for(let i=sess.s; i<sess.e; i++) {
+                html += `<th colspan="6" class="p-head" style="background:${pInfo[i].c}">${pInfo[i].h}</th><th rowspan="2" class="course">CRS</th>`;
+            }
+            html += `</tr><tr>`;
+            for(let i=sess.s; i<sess.e; i++) html += `<td>FI</td><td>STD</td><td>EXC</td><td>OFF</td><td>ON</td><td>RMK</td>`;
+            html += `</tr></thead><tbody>`;
+            aircrafts.forEach(r => {
+                html += `<tr><td class="reg-col">PK-${r}</td>`;
+                for(let i=sess.s; i<sess.e; i++) {
+                    const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk'];
+                    fields.forEach(f => html += `<td id="${r}-${i}-${f}">-</td>`);
+                    html += `<td class="course" id="${r}-${i}-crs">PNB 7</td>`;
+                }
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+        });
+        document.getElementById('display').innerHTML = html;
+        loadData();
+    }
+
+    function loadData() {
+        const data = JSON.parse(localStorage.getItem('flightDB') || '{}');
+        Object.keys(data).forEach(key => {
+            const el = document.getElementById(key);
+            if(el) {
+                el.innerText = data[key] || "-";
+                if(data[key].toUpperCase() === "OK") el.style.background = "#2ecc71", el.style.color = "white";
+            }
+        });
+    }
+
+    window.onload = buildTable;
+    // Auto refresh data setiap 5 detik
+    setInterval(loadData, 5000);
+</script>
 </body>
 </html>
