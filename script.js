@@ -40,30 +40,38 @@ function buildTable() {
     loadData(); // Langsung muat data setelah tabel dibuat
 }
 
-// --- FUNGSI UNTUK ADMIN (admin.html) ---
-function saveData(date) {
-    const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
-    const r = document.getElementById('reg').value;
-    const p = document.getElementById('period').value;
-    
-    // Field yang ingin disimpan
-    const fields = ['fi', 'std', 'exc'];
+// Set tanggal hari ini otomatis
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('flight-date').valueAsDate = new Date();
+});
 
+function handleSave() {
+    const dateVal = document.getElementById('flight-date').value;
+    const regVal = document.getElementById('reg').value;
+    const periodVal = document.getElementById('period').value;
+    
+    if (!dateVal) {
+        alert("Pilih tanggal dulu!");
+        return;
+    }
+
+    const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
+    
+    // Simpan data dengan prefix Tanggal
+    const fields = ['fi', 'std', 'exc'];
     fields.forEach(f => {
-        const val = document.getElementById(f).value;
-        // Format KEY: TANGGAL-REG-PERIODE-FIELD
-        // Contoh: 2026-04-06-AEA-0-fi
-        db[`${date}-${r}-${p}-${f}`] = val || "-";
+        const input = document.getElementById(f);
+        // KEY: 2026-04-06-AEA-0-fi
+        db[`${dateVal}-${regVal}-${periodVal}-${f}`] = input.value || "-";
     });
 
     localStorage.setItem('flightDB', JSON.stringify(db));
-    alert(`Data Berhasil Disimpan untuk Tanggal ${date}`);
+    alert(`Tersimpan untuk ${regVal} tanggal ${dateVal}`);
     
-    // Opsional: Reset form input teks setelah simpan
+    // Reset form teks
     document.getElementById('fi').value = "";
     document.getElementById('std').value = "";
     document.getElementById('exc').value = "";
-}
 }
 function loadData() {
     // Ambil tanggal yang dipilih di Dashboard (buat input date di index.html dengan id="dash-date")
