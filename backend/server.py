@@ -39,9 +39,10 @@ DEFAULT_PERIODS = [
     {"number": 5, "label": "4th Period", "start": "06:30", "end": "07:30"},
     {"number": 6, "label": "5th Period", "start": "08:00", "end": "09:00"},
     {"number": 7, "label": "6th Period", "start": "09:30", "end": "10:30"},
-    {"number": 8, "label": "8th Period", "start": "12:00", "end": "13:00"},
-    {"number": 9, "label": "9th Period", "start": "13:00", "end": "14:00"},
-    {"number": 10, "label": "10th Period", "start": "14:00", "end": "15:00"},
+    {"number": 8, "label": "7th Period", "start": "10:30", "end": "11:30"},
+    {"number": 9, "label": "8th Period", "start": "12:00", "end": "13:00"},
+    {"number": 10, "label": "9th Period", "start": "13:00", "end": "14:00"},
+    {"number": 11, "label": "10th Period", "start": "14:00", "end": "15:00"},
 ]
 
 # ─── Predefined stages with sub-stages and exercises (from Daftar Stage spreadsheet) ───

@@ -159,9 +159,10 @@ export default function ScheduleBoard() {
   const totalFlights = schedules.filter(s => s.student_name).length;
   const usedAircraft = new Set(schedules.filter(s => s.student_name).map(s => s.aircraft_id)).size;
 
-  // Split periods into morning and afternoon groups
-  const morningPeriods = periods.filter(p => p.number <= 4);
-  const afternoonPeriods = periods.filter(p => p.number > 4);
+  // Split periods into 3 sessions
+  const morningPeriods = periods.filter(p => p.number >= 1 && p.number <= 4);   // 1st - REST
+  const afternoonPeriods = periods.filter(p => p.number >= 5 && p.number <= 8); // 4th - 7th
+  const nightPeriods = periods.filter(p => p.number >= 9 && p.number <= 11);    // 8th - 10th
 
   const renderCell = (ac, period) => {
     const data = getCellData(ac.id, period.number);
@@ -341,6 +342,52 @@ export default function ScheduleBoard() {
                         <div className="text-[10px] font-normal text-slate-400">{ac.aircraft_type}</div>
                       </td>
                       {afternoonPeriods.map(p => renderCell(ac, p))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Schedule Grid - Night (Optional) */}
+        {aircraft.length > 0 && nightPeriods.length > 0 && (
+          <div className="mb-4 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-[#1A2B4C] text-white px-4 py-2 flex items-center">
+              <span className="text-sm font-semibold" style={{ fontFamily: 'Outfit' }}>Night Session (Optional)</span>
+              <span className="ml-auto text-xs text-slate-300">{nightPeriods[0]?.start} - {nightPeriods[nightPeriods.length-1]?.end} UTC</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-slate-50">
+                    <th className="border border-slate-200 px-3 py-2 text-left text-xs font-semibold text-[#0B192C] sticky left-0 bg-slate-50 z-10 min-w-[100px]">
+                      A/C REG
+                    </th>
+                    {nightPeriods.map(p => (
+                      <th key={p.number} className="border border-slate-200 px-2 py-2 text-center text-[10px] font-semibold text-[#0B192C] min-w-[110px]">
+                        <div>{p.label}</div>
+                        <div className="text-[9px] text-slate-400 font-normal">{p.start} - {p.end} UTC</div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr className="bg-slate-50/50">
+                    <th className="border border-slate-200 px-3 py-1 text-left text-[10px] text-slate-500 sticky left-0 bg-slate-50/50 z-10"></th>
+                    {nightPeriods.map(p => (
+                      <th key={p.number} className="border border-slate-200 px-1 py-1 text-center text-[9px] text-slate-400">
+                        F.I / Student / EXC
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {aircraft.map(ac => (
+                    <tr key={ac.id} className="hover:bg-slate-50/30">
+                      <td className="border border-slate-200 px-3 py-2 text-xs font-bold text-[#0B192C] sticky left-0 bg-white z-10 whitespace-nowrap">
+                        {ac.registration}
+                        <div className="text-[10px] font-normal text-slate-400">{ac.aircraft_type}</div>
+                      </td>
+                      {nightPeriods.map(p => renderCell(ac, p))}
                     </tr>
                   ))}
                 </tbody>
