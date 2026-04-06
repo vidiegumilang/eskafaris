@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import api from '../utils/api';
-import { Bell, Calendar, Users, UserCheck, Plane, AlertCircle } from 'lucide-react';
+import { Bell, Calendar, Users, UserCheck, Plane, AlertCircle, Megaphone } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 
@@ -14,6 +14,7 @@ export default function Dashboard() {
   });
   const [expiringLicenses, setExpiringLicenses] = useState({ instructors: [], students: [], total: 0 });
   const [upcomingSchedules, setUpcomingSchedules] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -21,12 +22,13 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const [instructorsRes, studentsRes, aircraftRes, schedulesRes, notificationsRes] = await Promise.all([
+      const [instructorsRes, studentsRes, aircraftRes, schedulesRes, notificationsRes, announcementsRes] = await Promise.all([
         api.get('/instructors'),
         api.get('/students'),
         api.get('/aircraft'),
         api.get('/schedules'),
         api.get('/notifications/expiring-licenses'),
+        api.get('/announcements'),
       ]);
 
       setStats({
@@ -38,6 +40,7 @@ export default function Dashboard() {
 
       setExpiringLicenses(notificationsRes.data);
       setUpcomingSchedules(schedulesRes.data.slice(0, 5));
+      setAnnouncements(announcementsRes.data.slice(0, 3));
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     }
@@ -145,16 +148,16 @@ export default function Dashboard() {
                       <Calendar className="text-[#F4A261] mt-0.5" size={18} />
                       <div className="flex-1">
                         <p className="font-medium text-[#0B192C] text-sm">
-                          {schedule.aircraft?.registration || 'N/A'} - {schedule.time_slot}
+                          {schedule.aircraft_id || 'N/A'} - Period {schedule.period_number}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">
-                          {schedule.instructor?.name} / {schedule.student?.name}
+                          {schedule.instructor_callsign || '-'} / {schedule.student_name || '-'}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge className="text-xs">{schedule.date}</Badge>
-                          {schedule.stage && (
-                            <Badge className={`status-badge-${schedule.stage.name.toLowerCase()}`}>
-                              {schedule.stage.name}
+                          {schedule.exercise && (
+                            <Badge className="bg-blue-100 text-blue-700">
+                              {schedule.exercise}
                             </Badge>
                           )}
                         </div>
@@ -166,6 +169,29 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Announcements */}
+        {announcements.length > 0 && (
+          <Card className="border-slate-200 shadow-sm mt-6">
+            <CardHeader className="border-b border-slate-200">
+              <CardTitle className="text-xl font-medium text-[#0B192C]" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Latest Announcements
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-3">
+              {announcements.map(item => (
+                <div key={item.id} className={`p-3 rounded-lg border ${item.priority === 'urgent' ? 'bg-red-50 border-red-200' : item.priority === 'important' ? 'bg-yellow-50 border-yellow-200' : 'bg-slate-50 border-slate-200'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Megaphone size={14} className={item.priority === 'urgent' ? 'text-red-500' : 'text-[#F4A261]'} />
+                    <span className="font-semibold text-[#0B192C] text-sm">{item.title}</span>
+                    <Badge className={`text-[10px] ${item.priority === 'urgent' ? 'bg-red-100 text-red-700' : item.priority === 'important' ? 'bg-yellow-100 text-yellow-700' : 'bg-slate-100 text-slate-600'}`}>{item.priority}</Badge>
+                  </div>
+                  <p className="text-xs text-slate-600 line-clamp-2">{item.content}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

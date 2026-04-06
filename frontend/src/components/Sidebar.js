@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Home, Calendar, Users, UserCheck, Plane, Layers, LogOut, BookOpen } from 'lucide-react';
+import { Home, Calendar, Users, UserCheck, Plane, Layers, LogOut, BookOpen, MessageSquare, Megaphone, BarChart3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 
@@ -24,6 +24,9 @@ export const Sidebar = () => {
     { path: '/aircraft', icon: Plane, label: 'Aircraft' },
     { path: '/stages', icon: Layers, label: 'Stages' },
     { path: '/courses', icon: BookOpen, label: 'Courses' },
+    { path: '/flight-notes', icon: MessageSquare, label: 'Flight Notes' },
+    { path: '/announcements', icon: Megaphone, label: 'Announcements' },
+    { path: '/progress', icon: BarChart3, label: 'Progress' },
   ];
 
   return (

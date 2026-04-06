@@ -12,6 +12,9 @@ import Students from './pages/Students';
 import Aircraft from './pages/Aircraft';
 import Stages from './pages/Stages';
 import Courses from './pages/Courses';
+import FlightNotes from './pages/FlightNotes';
+import Announcements from './pages/Announcements';
+import ProgressTracker from './pages/ProgressTracker';
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
           <Route path="/aircraft" element={<ProtectedRoute><Aircraft /></ProtectedRoute>} />
           <Route path="/stages" element={<ProtectedRoute><Stages /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+          <Route path="/flight-notes" element={<ProtectedRoute><FlightNotes /></ProtectedRoute>} />
+          <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+          <Route path="/progress" element={<ProtectedRoute><ProgressTracker /></ProtectedRoute>} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
         <Toaster position="top-right" />

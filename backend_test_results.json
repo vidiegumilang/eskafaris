@@ -1,8 +1,8 @@
 {
   "summary": {
-    "tests_run": 40,
-    "tests_passed": 39,
-    "success_rate": 97.5
+    "tests_run": 61,
+    "tests_passed": 58,
+    "success_rate": 95.08196721311475
   },
   "results": [
     {
@@ -199,6 +199,111 @@
       "test": "Instructor Delete Attempt (Should Fail)",
       "success": false,
       "details": "Status: 404, Error: Not found"
+    },
+    {
+      "test": "Get Students for Notes",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Flight Note",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Flight Notes",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Flight Notes by Student",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Flight Note",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Flight Note",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Announcement",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Announcements",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Update Announcement",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Announcement",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Student Progress",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Mark Exercise Complete",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Progress Entry",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get WhatsApp Links",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Send Email Notification (Expected 503)",
+      "success": true,
+      "details": "Status: 503"
+    },
+    {
+      "test": "Get Stages with Sub-stages",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Stage PPL has sub_stages",
+      "success": true,
+      "details": "8 sub-stages"
+    },
+    {
+      "test": "Get Instructors (Check Phone Field)",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Instructors have phone field",
+      "success": false,
+      "details": "Phone field missing"
+    },
+    {
+      "test": "Get Students (Check Phone Field)",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Students have phone field",
+      "success": false,
+      "details": "Phone field missing"
     },
     {
       "test": "Logout",

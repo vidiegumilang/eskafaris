@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import api, { formatApiErrorDetail } from '../utils/api';
-import { Download, Plus, ChevronLeft, ChevronRight, Save } from 'lucide-react';
+import { Download, Plus, ChevronLeft, ChevronRight, Save, Share2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Input } from '../components/ui/input';
@@ -38,6 +38,7 @@ export default function ScheduleBoard() {
   const [courses, setCourses] = useState([]);
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [cellDialog, setCellDialog] = useState(null);
+  const [waDialog, setWaDialog] = useState(null);
   const [cellForm, setCellForm] = useState({
     instructor_callsign: '', student_name: '', exercise: '',
     block_off: '', block_on: '', remarks: '', course_id: '', status: 'scheduled'
@@ -145,6 +146,15 @@ export default function ScheduleBoard() {
     }
   };
 
+  const handleWhatsAppShare = async () => {
+    try {
+      const { data } = await api.get(`/share/whatsapp/${selectedDate}`);
+      setWaDialog(data);
+    } catch (err) {
+      toast.error('Failed to load WhatsApp links');
+    }
+  };
+
   // Summary stats
   const totalFlights = schedules.filter(s => s.student_name).length;
   const usedAircraft = new Set(schedules.filter(s => s.student_name).map(s => s.aircraft_id)).size;
@@ -203,6 +213,10 @@ export default function ScheduleBoard() {
             </h1>
           </div>
           <div className="flex items-center gap-3">
+            <Button onClick={handleWhatsAppShare} data-testid="whatsapp-share-button"
+              className="border border-green-200 text-green-700 hover:bg-green-50 bg-white rounded-lg px-3 py-2 text-sm font-medium">
+              <Share2 size={16} className="mr-1.5" />WhatsApp
+            </Button>
             <Button onClick={handleExport} data-testid="export-schedules-button"
               className="border border-slate-200 text-[#0B192C] hover:bg-slate-50 bg-white rounded-lg px-3 py-2 text-sm font-medium">
               <Download size={16} className="mr-1.5" />Export
@@ -446,6 +460,41 @@ export default function ScheduleBoard() {
                   className="flex-1 bg-[#F4A261] text-white hover:bg-[#E78A43] rounded-lg text-sm">
                   <Save size={14} className="mr-1.5" />Save
                 </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* WhatsApp Share Dialog */}
+        <Dialog open={!!waDialog} onOpenChange={open => !open && setWaDialog(null)}>
+          <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle style={{ fontFamily: 'Outfit' }}>Share Schedule via WhatsApp - {waDialog?.date}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3 mt-3">
+              {waDialog?.links?.length === 0 ? (
+                <p className="text-sm text-slate-500 text-center py-4">No scheduled flights for this date</p>
+              ) : waDialog?.links?.map((link, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Badge className={link.type === 'student' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}>{link.type}</Badge>
+                      <span className="font-medium text-sm text-[#0B192C]">{link.name}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">{link.phone || 'No phone number'}</p>
+                  </div>
+                  {link.wa_link ? (
+                    <a href={link.wa_link} target="_blank" rel="noopener noreferrer" data-testid={`wa-link-${link.name}`}
+                      className="px-3 py-1.5 bg-green-500 text-white rounded-lg text-xs font-medium hover:bg-green-600 transition-colors">
+                      Send
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-400">No phone</span>
+                  )}
+                </div>
+              ))}
+              <div className="pt-2">
+                <Button onClick={() => setWaDialog(null)} className="w-full border border-slate-200 text-[#0B192C] hover:bg-slate-50 bg-white rounded-lg text-sm">Close</Button>
               </div>
             </div>
           </DialogContent>

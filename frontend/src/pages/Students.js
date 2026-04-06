@@ -20,7 +20,7 @@ export default function Students() {
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ name: '', license_expiry: '', course_id: '' });
+  const [formData, setFormData] = useState({ name: '', license_expiry: '', course_id: '', phone: '' });
 
   useEffect(() => { fetchData(); }, []);
 
@@ -68,7 +68,7 @@ export default function Students() {
 
   const handleEdit = (student) => {
     setEditingId(student.id);
-    setFormData({ name: student.name, license_expiry: student.license_expiry, course_id: student.course_id || '' });
+    setFormData({ name: student.name, license_expiry: student.license_expiry, course_id: student.course_id || '', phone: student.phone || '' });
     setIsDialogOpen(true);
   };
 
@@ -87,7 +87,7 @@ export default function Students() {
     }
   };
 
-  const resetForm = () => { setFormData({ name: '', license_expiry: '', course_id: '' }); setEditingId(null); };
+  const resetForm = () => { setFormData({ name: '', license_expiry: '', course_id: '', phone: '' }); setEditingId(null); };
 
   const canEdit = user?.role === 'admin' || user?.role === 'instructor';
   const canDelete = user?.role === 'admin';
@@ -145,6 +145,10 @@ export default function Students() {
                             {courses.map(c => (<SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>))}
                           </SelectContent>
                         </Select>
+                      </div>
+                      <div>
+                        <Label>Phone (WhatsApp)</Label>
+                        <Input data-testid="student-phone-input" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="mt-1" placeholder="628123456789" />
                       </div>
                       <div className="flex gap-3 pt-2">
                         <Button type="button" onClick={() => setIsDialogOpen(false)} className="flex-1 border border-slate-200 text-[#0B192C] hover:bg-slate-50 bg-white">Cancel</Button>

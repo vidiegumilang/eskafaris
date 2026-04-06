@@ -22,6 +22,7 @@ export default function Instructors() {
     name: '',
     callsign: '',
     license_expiry: '',
+    phone: '',
   });
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function Instructors() {
       name: instructor.name,
       callsign: instructor.callsign,
       license_expiry: instructor.license_expiry,
+      phone: instructor.phone || '',
     });
     setIsDialogOpen(true);
   };
@@ -102,7 +104,7 @@ export default function Instructors() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', callsign: '', license_expiry: '' });
+    setFormData({ name: '', callsign: '', license_expiry: '', phone: '' });
     setEditingId(null);
   };
 
@@ -214,6 +216,18 @@ export default function Instructors() {
                           onChange={(e) => setFormData({ ...formData, license_expiry: e.target.value })}
                           required
                           className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="phone">Phone (WhatsApp)</Label>
+                        <Input
+                          id="phone"
+                          data-testid="instructor-phone-input"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="mt-1"
+                          placeholder="628123456789"
                         />
                       </div>
 

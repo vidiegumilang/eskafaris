@@ -10,6 +10,10 @@ class FlightOpsAPITester:
         self.tests_run = 0
         self.tests_passed = 0
         self.test_results = []
+        self.student_id = None
+        self.note_id = None
+        self.announcement_id = None
+        self.progress_id = None
 
     def log_test(self, name, success, details=""):
         """Log test result"""
@@ -600,6 +604,271 @@ class FlightOpsAPITester:
                 403  # Expecting forbidden
             )
 
+    def test_flight_notes_crud(self):
+        """Test Flight Notes CRUD operations"""
+        print("\n📝 Testing Flight Notes CRUD...")
+        
+        # Get students first to use in notes
+        response = self.run_test(
+            "Get Students for Notes",
+            "GET",
+            "students",
+            200
+        )
+        if response and isinstance(response, list) and len(response) > 0:
+            self.student_id = response[0]['id']
+            student_name = response[0]['name']
+        else:
+            self.log_test("Flight Notes Setup", False, "No students found")
+            return
+        
+        # Create flight note
+        note_data = {
+            "student_id": self.student_id,
+            "student_name": student_name,
+            "exercise": "A5",
+            "stage_name": "PPL",
+            "note": "Good performance on basic maneuvers",
+            "rating": "satisfactory",
+            "date": datetime.now().strftime("%Y-%m-%d")
+        }
+        
+        response = self.run_test(
+            "Create Flight Note",
+            "POST",
+            "flight-notes",
+            200,
+            data=note_data
+        )
+        if response and 'id' in response:
+            self.note_id = response['id']
+        
+        # Get flight notes
+        self.run_test(
+            "Get Flight Notes",
+            "GET",
+            "flight-notes",
+            200
+        )
+        
+        # Get flight notes filtered by student
+        self.run_test(
+            "Get Flight Notes by Student",
+            "GET",
+            f"flight-notes?student_id={self.student_id}",
+            200
+        )
+        
+        # Update flight note
+        if self.note_id:
+            self.run_test(
+                "Update Flight Note",
+                "PUT",
+                f"flight-notes/{self.note_id}",
+                200,
+                data={"rating": "excellent", "note": "Updated: Excellent performance"}
+            )
+        
+        # Delete flight note
+        if self.note_id:
+            self.run_test(
+                "Delete Flight Note",
+                "DELETE",
+                f"flight-notes/{self.note_id}",
+                200
+            )
+
+    def test_announcements_crud(self):
+        """Test Announcements CRUD operations"""
+        print("\n📢 Testing Announcements CRUD...")
+        
+        # Create announcement
+        announcement_data = {
+            "title": "Test Announcement",
+            "content": "This is a test announcement for API testing",
+            "priority": "important",
+            "target_role": "all"
+        }
+        
+        response = self.run_test(
+            "Create Announcement",
+            "POST",
+            "announcements",
+            200,
+            data=announcement_data
+        )
+        if response and 'id' in response:
+            self.announcement_id = response['id']
+        
+        # Get announcements
+        self.run_test(
+            "Get Announcements",
+            "GET",
+            "announcements",
+            200
+        )
+        
+        # Update announcement
+        if self.announcement_id:
+            self.run_test(
+                "Update Announcement",
+                "PUT",
+                f"announcements/{self.announcement_id}",
+                200,
+                data={"priority": "urgent", "title": "Updated Test Announcement"}
+            )
+        
+        # Delete announcement
+        if self.announcement_id:
+            self.run_test(
+                "Delete Announcement",
+                "DELETE",
+                f"announcements/{self.announcement_id}",
+                200
+            )
+
+    def test_student_progress(self):
+        """Test Student Progress Tracker"""
+        print("\n📊 Testing Student Progress...")
+        
+        if not self.student_id:
+            # Get students if not already available
+            response = self.run_test(
+                "Get Students for Progress",
+                "GET",
+                "students",
+                200
+            )
+            if response and isinstance(response, list) and len(response) > 0:
+                self.student_id = response[0]['id']
+        
+        if not self.student_id:
+            self.log_test("Student Progress Setup", False, "No students found")
+            return
+        
+        # Get student progress
+        self.run_test(
+            "Get Student Progress",
+            "GET",
+            f"progress/{self.student_id}",
+            200
+        )
+        
+        # Mark exercise as completed
+        progress_data = {
+            "student_id": self.student_id,
+            "stage_name": "PPL",
+            "exercise": "A1",
+            "completed_date": datetime.now().strftime("%Y-%m-%d"),
+            "instructor_callsign": "TEST",
+            "remarks": "Test completion"
+        }
+        
+        response = self.run_test(
+            "Mark Exercise Complete",
+            "POST",
+            "progress",
+            200,
+            data=progress_data
+        )
+        if response and 'id' in response:
+            self.progress_id = response['id']
+        
+        # Delete progress entry
+        if self.progress_id:
+            self.run_test(
+                "Delete Progress Entry",
+                "DELETE",
+                f"progress/{self.progress_id}",
+                200
+            )
+
+    def test_whatsapp_share(self):
+        """Test WhatsApp share functionality"""
+        print("\n📱 Testing WhatsApp Share...")
+        
+        test_date = datetime.now().strftime("%Y-%m-%d")
+        self.run_test(
+            "Get WhatsApp Links",
+            "GET",
+            f"share/whatsapp/{test_date}",
+            200
+        )
+
+    def test_email_notification(self):
+        """Test email notification (should return 503 as Gmail not configured)"""
+        print("\n📧 Testing Email Notification...")
+        
+        email_data = {
+            "to_email": "test@example.com",
+            "subject": "Test Email",
+            "body": "This is a test email"
+        }
+        
+        self.run_test(
+            "Send Email Notification (Expected 503)",
+            "POST",
+            "notifications/send-email",
+            503,  # Expected to fail as Gmail not configured
+            data=email_data
+        )
+
+    def test_stages_with_substages(self):
+        """Test that stages now have sub_stages"""
+        print("\n🎯 Testing Stages with Sub-stages...")
+        
+        response = self.run_test(
+            "Get Stages with Sub-stages",
+            "GET",
+            "stages",
+            200
+        )
+        
+        if response and isinstance(response, list):
+            substages_found = False
+            for stage in response:
+                if 'sub_stages' in stage and stage['sub_stages']:
+                    substages_found = True
+                    self.log_test(f"Stage {stage['name']} has sub_stages", True, f"{len(stage['sub_stages'])} sub-stages")
+                    break
+            
+            if not substages_found:
+                self.log_test("Stages Sub-stages Check", False, "No stages with sub_stages found")
+
+    def test_phone_fields(self):
+        """Test that instructors and students have phone fields"""
+        print("\n📞 Testing Phone Fields...")
+        
+        # Test instructors phone field
+        response = self.run_test(
+            "Get Instructors (Check Phone Field)",
+            "GET",
+            "instructors",
+            200
+        )
+        
+        if response and isinstance(response, list) and len(response) > 0:
+            instructor = response[0]
+            if 'phone' in instructor:
+                self.log_test("Instructors have phone field", True)
+            else:
+                self.log_test("Instructors have phone field", False, "Phone field missing")
+        
+        # Test students phone field
+        response = self.run_test(
+            "Get Students (Check Phone Field)",
+            "GET",
+            "students",
+            200
+        )
+        
+        if response and isinstance(response, list) and len(response) > 0:
+            student = response[0]
+            if 'phone' in student:
+                self.log_test("Students have phone field", True)
+            else:
+                self.log_test("Students have phone field", False, "Phone field missing")
+
     def run_all_tests(self):
         """Run all test suites"""
         print("🚀 Starting Flight Operations API Testing...")
@@ -626,6 +895,15 @@ class FlightOpsAPITester:
         self.test_export_functionality()
         self.test_import_functionality()
         self.test_role_based_access()
+        
+        # Test new features (iteration 2)
+        self.test_flight_notes_crud()
+        self.test_announcements_crud()
+        self.test_student_progress()
+        self.test_whatsapp_share()
+        self.test_email_notification()
+        self.test_stages_with_substages()
+        self.test_phone_fields()
         
         # Print summary
         print(f"\n📊 Test Summary:")
