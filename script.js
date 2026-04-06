@@ -41,30 +41,29 @@ function buildTable() {
 }
 
 // --- FUNGSI UNTUK ADMIN (admin.html) ---
-function saveData() {
+function saveData(date) {
     const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
     const r = document.getElementById('reg').value;
     const p = document.getElementById('period').value;
     
-    // Ambil input dari form
-    const fiVal = document.getElementById('fi').value;
-    const stdVal = document.getElementById('std').value;
-    const excVal = document.getElementById('exc').value;
+    // Field yang ingin disimpan
+    const fields = ['fi', 'std', 'exc'];
 
-    // Simpan ke object database temporary
-    db[`${r}-${p}-fi`] = fiVal || "-";
-    db[`${r}-${p}-std`] = stdVal || "-";
-    db[`${r}-${p}-exc`] = excVal || "-";
+    fields.forEach(f => {
+        const val = document.getElementById(f).value;
+        // Format KEY: TANGGAL-REG-PERIODE-FIELD
+        // Contoh: 2026-04-06-AEA-0-fi
+        db[`${date}-${r}-${p}-${f}`] = val || "-";
+    });
 
-    // Simpan permanent ke browser
     localStorage.setItem('flightDB', JSON.stringify(db));
+    alert(`Data Berhasil Disimpan untuk Tanggal ${date}`);
     
-    alert(`Update Berhasil: PK-${r} Periode ${parseInt(p)+1}`);
-    
-    // Reset form setelah sukses
+    // Opsional: Reset form input teks setelah simpan
     document.getElementById('fi').value = "";
     document.getElementById('std').value = "";
     document.getElementById('exc').value = "";
+}
 }
 
 // --- FUNGSI LOAD & SYNC DATA ---
