@@ -84,7 +84,33 @@ function loadData() {
         }
     });
 }
-
+function loadData() {
+    // Ambil tanggal yang dipilih di Dashboard (buat input date di index.html dengan id="dash-date")
+    const selectedDate = document.getElementById('dash-date').value;
+    const db = JSON.parse(localStorage.getItem('flightDB') || '{}');
+    
+    aircrafts.forEach(r => {
+        for (let p = 0; p < 8; p++) {
+            const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
+            fields.forEach(f => {
+                // Dashboard mencari key dengan prefix tanggal: "2026-03-02-AEA-0-fi"
+                const storageKey = `${selectedDate}-${r}-${p}-${f}`;
+                const cellId = `${r}-${p}-${f}`;
+                const el = document.getElementById(cellId);
+                
+                if (el) {
+                    el.innerText = db[storageKey] || "-";
+                    
+                    // Highlight Status OK
+                    if (f === 'rmk' && db[storageKey]?.toUpperCase() === "OK") {
+                        el.style.backgroundColor = "#27ae60";
+                        el.style.color = "white";
+                    }
+                }
+            });
+        }
+    });
+}
 // Jalankan saat window dimuat
 window.onload = () => {
     buildTable();
