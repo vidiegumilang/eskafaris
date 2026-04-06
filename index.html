@@ -5,8 +5,11 @@
     <title>Dashboard - Flight Schedule</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #2c3e50; color: white; padding: 10px; }
-        nav { background: #1a252f; padding: 10px 20px; display: flex; justify-content: space-between; margin-bottom: 10px; }
+        nav { background: #1a252f; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         nav a { color: #bdc3c7; text-decoration: none; font-size: 14px; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
+        /* Styling Input Tanggal di Dashboard */
+        #dash-date { padding: 5px; border-radius: 4px; border: none; font-family: inherit; font-weight: bold; cursor: pointer; }
         .table-wrapper { background: white; color: black; border-radius: 5px; overflow-x: auto; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
         th, td { border: 1px solid #ddd; padding: 4px; text-align: center; font-size: 10px; }
@@ -19,12 +22,19 @@
 
 <nav>
     <div><strong>FLIGHT OPS MONITOR</strong></div>
-    <a href="admin.html">⚙️ SETTINGS</a>
+    <div class="nav-controls">
+        <label for="dash-date">VIEW DATE:</label>
+        <input type="date" id="dash-date" onchange="loadData()">
+        <a href="admin.html">⚙️ SETTINGS</a>
+    </div>
 </nav>
 
 <div id="display"></div>
 
 <script>
+    // Set default tanggal hari ini saat pertama kali buka
+    document.getElementById('dash-date').valueAsDate = new Date();
+
     const aircrafts = ["AEA", "AEB", "AEC", "AED", "AEE", "AEF", "AEG", "AEH", "AEI", "AEJ", "AEK", "AEL", "AEM", "AEN", "AEO", "AEP", "AEQ", "AER"];
     const pInfo = [
         {h: "1ST (01-02)", c: "#e74c3c"}, {h: "2ND (02:30-03:30)", c: "#e74c3c"},
@@ -38,6 +48,7 @@
         const sessions = [{t: "MORNING", s: 0, e: 4}, {t: "AFTERNOON", s: 4, e: 8}];
         
         sessions.forEach(sess => {
+            html += `<h4 style="margin: 10px 0;">${sess.t} SESSION</h4>`;
             html += `<div class="table-wrapper"><table><thead><tr><th rowspan="2" class="reg-col">REG</th>`;
             for(let i=sess.s; i<sess.e; i++) {
                 html += `<th colspan="6" class="p-head" style="background:${pInfo[i].c}">${pInfo[i].h}</th><th rowspan="2" class="course">CRS</th>`;
@@ -49,8 +60,9 @@
                 html += `<tr><td class="reg-col">PK-${r}</td>`;
                 for(let i=sess.s; i<sess.e; i++) {
                     const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk'];
+                    // ID tetap sederhana tanpa tanggal agar mudah dimanipulasi DOM
                     fields.forEach(f => html += `<td id="${r}-${i}-${f}">-</td>`);
-                    html += `<td class="course" id="${r}-${i}-crs">PNB 7</td>`;
+                    html += `<td class="course" id="${r}-${i}-crs">-</td>`;
                 }
                 html += `</tr>`;
             });
@@ -62,17 +74,47 @@
 
     function loadData() {
         const data = JSON.parse(localStorage.getItem('flightDB') || '{}');
-        Object.keys(data).forEach(key => {
-            const el = document.getElementById(key);
-            if(el) {
-                el.innerText = data[key] || "-";
-                if(data[key].toUpperCase() === "OK") el.style.background = "#2ecc71", el.style.color = "white";
+        const selectedDate = document.getElementById('dash-date').value;
+
+        // Bersihkan tabel dulu sebelum load data tanggal yang dipilih
+        aircrafts.forEach(r => {
+            for(let i=0; i<8; i++) {
+                const fields = ['fi', 'std', 'exc', 'off', 'on', 'rmk', 'crs'];
+                fields.forEach(f => {
+                    const cell = document.getElementById(`${r}-${i}-${f}`);
+                    if(cell) {
+                        cell.innerText = "-";
+                        cell.style.background = ""; // Reset warna OK
+                        cell.style.color = "";
+                    }
+                });
+            }
+        });
+
+        // Load data berdasarkan filter tanggal: TANGGAL-REG-PERIODE-KOLOM
+        Object.keys(data).forEach(storageKey => {
+            // Cek apakah key diawali dengan tanggal yang dipilih
+            if (storageKey.startsWith(selectedDate)) {
+                // Ambil bagian ID elemen (buang string tanggalnya)
+                const elementId = storageKey.replace(`${selectedDate}-`, "");
+                const el = document.getElementById(elementId);
+                
+                if(el) {
+                    const val = data[storageKey];
+                    el.innerText = val || "-";
+                    
+                    // Style khusus jika Remark "OK"
+                    if(elementId.endsWith('rmk') && val.toUpperCase() === "OK") {
+                        el.style.background = "#2ecc71";
+                        el.style.color = "white";
+                    }
+                }
             }
         });
     }
 
     window.onload = buildTable;
-    // Auto refresh data setiap 5 detik
+    // Auto sync data setiap 5 detik
     setInterval(loadData, 5000);
 </script>
 </body>
